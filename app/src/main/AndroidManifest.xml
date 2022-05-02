@@ -9,6 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+        android:theme="@style/Theme.AppCompat.NoActionBar"
+        <activity
+            android:name=".MeasuresGraphActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MeasureActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ConnectActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

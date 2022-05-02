@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="login"> Login </string>
+    <string name="connect"> Conectar </string>
+    <string name="measure"> Medicion </string>
+    <string name="measures"> Mediciones </string>
+
 </resources>
