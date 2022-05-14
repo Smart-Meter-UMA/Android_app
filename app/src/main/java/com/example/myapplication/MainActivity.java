@@ -38,6 +38,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        this.bLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(i);
+
+            }
+        });
 
     }
 }
