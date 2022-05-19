@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -14,18 +15,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     // La forma de obtener el token es con account.getToken(), ya es cuestión de mandarlo donde sea.
     private SignInButton signInButton;
     private Button signoutButton;
+
+    private GoogleApiClient googleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                             // There are no request codes
                             System.out.println("LLega al result");
                             Intent data = result.getData();
+
                             finish();
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         }
@@ -51,11 +60,28 @@ public class LoginActivity extends AppCompatActivity {
         this.signoutButton = findViewById(R.id.bSignOut);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("724046535439-h28ieq17aff119i367el50skelqkdgh4.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        /*
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+         */
+
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if(account != null){
+            System.out.println("La acccount es " + account.getEmail());
+            System.out.println("EL token es " + account.getIdToken());
+            //Una vez tienes eso puedes hacer la post junto al nombre y al hogar.
+
+        }else{
+            System.out.println("Account nula");
+        }
         updateUI(account);
 
 
@@ -90,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
             // a listener.
 
         System.out.println("Aquí llega result");
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            //Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         finish();
         startActivity(getIntent());
         Toast.makeText(this,"Funciona el sign in", Toast.LENGTH_LONG);
@@ -106,9 +132,17 @@ public class LoginActivity extends AppCompatActivity {
         }else{
             System.out.println("Entra else");
             Toast.makeText(this,account.getEmail(),Toast.LENGTH_LONG);
+            System.out.println("Email");
             System.out.println(account.getEmail());
+            System.out.println("Token");
+            System.out.println(account.getIdToken());
             this.signInButton.setVisibility(View.GONE);
             this.signoutButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
