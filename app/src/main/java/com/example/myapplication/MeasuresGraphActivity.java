@@ -8,6 +8,8 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import classes.FuncionesBackend;
+
 public class MeasuresGraphActivity extends AppCompatActivity {
 
     private GraphView graphView;
@@ -20,7 +22,7 @@ public class MeasuresGraphActivity extends AppCompatActivity {
 
         addData();
 
-        graphView.setTitle("Prueba grafica =D");
+        graphView.setTitle("Lista de mediciones históricas para el usuario " + FuncionesBackend.getEmailGoogle());
     }
 
     private void addData() {

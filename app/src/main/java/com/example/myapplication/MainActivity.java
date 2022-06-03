@@ -23,6 +23,15 @@ public class MainActivity extends AppCompatActivity {
         this.bGraficas=findViewById(R.id.bMedidasGrafica);
         this.bMeasure=findViewById(R.id.bMedida);
 
+        this.bConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), DeviceScanActivity.class);
+                startActivity(i);
+            }
+        });
+
+
         this.bGraficas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

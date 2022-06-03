@@ -26,6 +26,8 @@ import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 
+import classes.FuncionesBackend;
+
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     // La forma de obtener el token es con account.getToken(), ya es cuestión de mandarlo donde sea.
@@ -136,6 +138,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             System.out.println(account.getEmail());
             System.out.println("Token");
             System.out.println(account.getIdToken());
+
+            FuncionesBackend.setTokenGoogle(account.getIdToken());
+            FuncionesBackend.setEmailGoogle(account.getEmail());
             this.signInButton.setVisibility(View.GONE);
             this.signoutButton.setVisibility(View.VISIBLE);
         }
@@ -144,5 +149,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
 }

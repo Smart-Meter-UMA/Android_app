@@ -7,14 +7,14 @@
     tools:context=".MeasureActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="302dp"
+        android:id="@+id/tCorreo"
+        android:layout_width="379dp"
         android:layout_height="156dp"
         android:fontFamily="sans-serif-black"
-        android:text="Aquí saldrán las mediciones"
+        android:text="!Esta es la última medición registrada para el email CORREO !"
         android:textSize="34sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="66dp"
+        tools:layout_editor_absoluteX="22dp"
         tools:layout_editor_absoluteY="39dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/layout_border"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/tCorreo">
 
         <TextView
             android:id="@+id/textView3"
@@ -50,9 +50,9 @@
             android:id="@+id/imageView"
             android:layout_width="64dp"
             android:layout_height="51dp"
-            android:layout_marginStart="208dp"
-            android:layout_marginTop="128dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="108dp"
+            android:layout_marginTop="136dp"
+            app:layout_constraintStart_toEndOf="@+id/tPower"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/thunder" />
 
@@ -65,6 +65,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
             app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
+
+        <TextView
+            android:id="@+id/tPower"
+            android:layout_width="58dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="24dp"
+            android:text="12"
+            android:textSize="48sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/tFecha"
+            android:layout_width="58dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="32dp"
+            android:text="12"
+            android:textSize="48sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

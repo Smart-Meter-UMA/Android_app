@@ -5,7 +5,9 @@
       <map>
         <entry key="..\:/Users/david/OneDrive/Escritorio/UNIVERSIDAD/CUARTO/TFG/APP_ANDROID/K_Project/Android_Gerena_Comino/app/src/main/res/drawable/layout_border.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/david/OneDrive/Escritorio/UNIVERSIDAD/CUARTO/TFG/APP_ANDROID/K_Project/Android_Gerena_Comino/app/src/main/res/layout/activity_connect.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/david/OneDrive/Escritorio/UNIVERSIDAD/CUARTO/TFG/APP_ANDROID/K_Project/Android_Gerena_Comino/app/src/main/res/layout/activity_login.xml" value="0.17300724637681159" />
+        <entry key="..\:/Users/david/OneDrive/Escritorio/UNIVERSIDAD/CUARTO/TFG/APP_ANDROID/K_Project/Android_Gerena_Comino/app/src/main/res/layout/activity_device_connect.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/david/OneDrive/Escritorio/UNIVERSIDAD/CUARTO/TFG/APP_ANDROID/K_Project/Android_Gerena_Comino/app/src/main/res/layout/activity_device_control_custom.xml" value="0.264" />
+        <entry key="..\:/Users/david/OneDrive/Escritorio/UNIVERSIDAD/CUARTO/TFG/APP_ANDROID/K_Project/Android_Gerena_Comino/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Users/david/OneDrive/Escritorio/UNIVERSIDAD/CUARTO/TFG/APP_ANDROID/K_Project/Android_Gerena_Comino/app/src/main/res/layout/activity_main.xml" value="0.4" />
         <entry key="..\:/Users/david/OneDrive/Escritorio/UNIVERSIDAD/CUARTO/TFG/APP_ANDROID/K_Project/Android_Gerena_Comino/app/src/main/res/layout/activity_measure.xml" value="0.264" />
         <entry key="..\:/Users/david/OneDrive/Escritorio/UNIVERSIDAD/CUARTO/TFG/APP_ANDROID/K_Project/Android_Gerena_Comino/app/src/main/res/layout/activity_measures_graph.xml" value="0.17300724637681159" />
