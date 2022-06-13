@@ -66,16 +66,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .requestEmail()
                 .build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        /*
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-         */
-
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+
         if(account != null){
             System.out.println("La acccount es " + account.getEmail());
             System.out.println("EL token es " + account.getIdToken());
@@ -92,9 +85,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onClick(View view) {
                 Intent i = mGoogleSignInClient.getSignInIntent();
                 someActivityResultLauncher.launch(i);
-                System.out.println("Aquí llega intent");
                 updateUI(account);
-
             }
         });
 

@@ -4,55 +4,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DeviceControlCustomActivity">
+    tools:context=".DeviceControlBLEActivity">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="128dp"
         android:text="Nombre dispositivo"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tNombreDispositivo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="128dp"
-        android:text="NOMBRE"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="145dp"
-        android:layout_height="27dp"
+        android:layout_width="63dp"
+        android:layout_height="26dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="64dp"
-        android:text="Address_dispositivo"
+        android:text="Address"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="71dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="72dp"
+        android:text="Hogares"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
         android:id="@+id/tAddressDispositivo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="56dp"
         android:text="Address"
         app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/tNombreDispositivo" />
+        app:layout_constraintTop_toBottomOf="@+id/tNameSmartMeter" />
 
     <Button
         android:id="@+id/bSendData"
         android:layout_width="192dp"
         android:layout_height="59dp"
-        android:layout_marginStart="108dp"
-        android:layout_marginBottom="188dp"
+        android:layout_marginBottom="132dp"
         android:text="Send Data"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="169dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="68dp"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/tAddressDispositivo" />
+
+    <EditText
+        android:id="@+id/tNameSmartMeter"
+        android:layout_width="198dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="100dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

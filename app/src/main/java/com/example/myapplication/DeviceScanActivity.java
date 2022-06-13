@@ -59,13 +59,11 @@ public class DeviceScanActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getActionBar().setTitle(R.string.title_devices);
         mHandler = new Handler();
-        this.toast.makeText(this, "Buscando smart meter bellako",Toast.LENGTH_SHORT).show();
+        this.toast.makeText(this, "Buscando smart meter",Toast.LENGTH_SHORT).show();
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            //Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -81,7 +79,6 @@ public class DeviceScanActivity extends ListActivity {
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
-            //Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -98,7 +95,6 @@ public class DeviceScanActivity extends ListActivity {
         }
         // Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter();
-        //setListAdapter(mLeDeviceListAdapter);
         scanLeDevice(true);
     }
 
@@ -130,15 +126,14 @@ public class DeviceScanActivity extends ListActivity {
                     if( btDevice.getName().equals("SmartMeter") && !load){
                         System.out.println("Dispositivo " + btDevice.getName());
                         load=true;
-                        final Intent intent = new Intent(getApplicationContext(), DeviceControlCustomActivity.class);
-                        intent.putExtra(DeviceControlCustomActivity.EXTRAS_DEVICE_NAME, btDevice.getName());
-                        intent.putExtra(DeviceControlCustomActivity.EXTRAS_DEVICE_ADDRESS, btDevice.getAddress());
+                        final Intent intent = new Intent(getApplicationContext(), DeviceControlBLEActivity.class);
+                        intent.putExtra(DeviceControlBLEActivity.EXTRAS_DEVICE_NAME, btDevice.getName());
+                        intent.putExtra(DeviceControlBLEActivity.EXTRAS_DEVICE_ADDRESS, btDevice.getAddress());
                         startActivity(intent);
                         hideToast();
                     }
 
                 }
-                //onnectToDevice(btDevice);
             }
 
             @Override
@@ -178,13 +173,11 @@ public class DeviceScanActivity extends ListActivity {
 
 
             mScanning = true;
-            //mBluetoothAdapter.startLeScan(mLeScanCallback);
             mBluetoothAdapter.getBluetoothLeScanner().startScan(scanCallback);
             System.out.println("Llega al scan");
 
         } else {
             mScanning = false;
-            //mBluetoothAdapter.stopLeScan(mLeScanCallback);
             mBluetoothAdapter.getBluetoothLeScanner().stopScan(scanCallback);
         }
         invalidateOptionsMenu();
@@ -234,7 +227,6 @@ public class DeviceScanActivity extends ListActivity {
                         public void run() {
                             System.out.println("El device es" + device.getName());
                             mLeDeviceListAdapter.addDevice(device);
-                            //mLeDeviceListAdapter.notifyDataSetChanged();
                         }
                     });
                 }

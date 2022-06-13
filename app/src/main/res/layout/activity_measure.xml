@@ -10,18 +10,20 @@
         android:id="@+id/tCorreo"
         android:layout_width="379dp"
         android:layout_height="156dp"
+        android:layout_marginTop="48dp"
         android:fontFamily="sans-serif-black"
-        android:text="!Esta es la última medición registrada para el email CORREO !"
-        android:textSize="34sp"
+        android:text="¡Esta es la última medición registrada para el email CORREO !"
+        android:textSize="30sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="22dp"
-        tools:layout_editor_absoluteY="39dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="325dp"
-        android:layout_height="468dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="322dp"
+        android:layout_height="434dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="72dp"
         android:background="@drawable/layout_border"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tCorreo">
@@ -40,8 +42,8 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="120dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="136dp"
             android:text="Fecha"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -50,7 +52,7 @@
             android:id="@+id/imageView"
             android:layout_width="64dp"
             android:layout_height="51dp"
-            android:layout_marginStart="108dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="136dp"
             app:layout_constraintStart_toEndOf="@+id/tPower"
             app:layout_constraintTop_toTopOf="parent"
@@ -60,31 +62,30 @@
             android:id="@+id/imageView2"
             android:layout_width="67dp"
             android:layout_height="50dp"
-            android:layout_marginStart="204dp"
-            android:layout_marginTop="108dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="96dp"
+            app:layout_constraintStart_toEndOf="@+id/tFecha"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
             app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
 
         <TextView
             android:id="@+id/tPower"
-            android:layout_width="58dp"
-            android:layout_height="61dp"
+            android:layout_width="149dp"
+            android:layout_height="80dp"
             android:layout_marginStart="48dp"
             android:layout_marginTop="24dp"
-            android:text="12"
-            android:textSize="48sp"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <TextView
             android:id="@+id/tFecha"
-            android:layout_width="58dp"
-            android:layout_height="61dp"
+            android:layout_width="146dp"
+            android:layout_height="132dp"
             android:layout_marginStart="48dp"
             android:layout_marginTop="32dp"
             android:text="12"
-            android:textSize="48sp"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
     </androidx.constraintlayout.widget.ConstraintLayout>

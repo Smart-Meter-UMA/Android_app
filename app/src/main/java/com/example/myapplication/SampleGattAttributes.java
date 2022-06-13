@@ -32,7 +32,7 @@ public class SampleGattAttributes {
 
     public static String UUID_SSID= "6bfe5343-d32a-11ec-9d64-0242ac120002";
     public static String UUID_PASSWORD ="760a51b2-d32a-11ec-9d64-0242ac120002";
-
+    public static String UUID_TOKEN = "544f4b4e-d32a-11ec-9d64-0242ac120002";
     static {
         // Sample Services.
         attributes.put("0000180d-0000-1000-8000-00805f9b34fb", "Heart Rate Service");
@@ -43,6 +43,7 @@ public class SampleGattAttributes {
 
         attributes.put("6bfe5343-d32a-11ec-9d64-0242ac120002", "UUID_SSID");
         attributes.put("760a51b2-d32a-11ec-9d64-0242ac120002", "UUID_PASSWORD");
+        attributes.put("544f4b4e-d32a-11ec-9d64-0242ac120002", "UUID_TOKEN");
 
     }
 

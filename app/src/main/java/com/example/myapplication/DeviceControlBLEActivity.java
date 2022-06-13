@@ -9,11 +9,21 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DeviceControlCustomActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import classes.FuncionesBackend;
+
+public class DeviceControlBLEActivity extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
@@ -29,6 +39,7 @@ public class DeviceControlCustomActivity extends AppCompatActivity {
     private BluetoothLeService mBluetoothLeService;
 
     private Button bSendaData;
+    private Spinner spinner;
 
 
     @Override
@@ -42,13 +53,31 @@ public class DeviceControlCustomActivity extends AppCompatActivity {
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
-        tName = findViewById(R.id.tNombreDispositivo);
+        tName = findViewById(R.id.tNameSmartMeter);
         tName.setText(mDeviceName);
 
         tAddress = findViewById(R.id.tAddressDispositivo);
         tAddress.setText(mDeviceAddress);
 
+        this.spinner = findViewById(R.id.spinner);
 
+
+        try {
+            JSONArray json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
+            //this.power.setText((String)(json.get(json.length()-1));
+            JSONObject jsonObject= ((JSONObject) json.get(0));
+            String [] items= new String[json.length()];
+            System.out.println(FuncionesBackend.getGetResponseGetHogares());
+            for(int i=0 ; i < json.length(); i++){
+                jsonObject= ((JSONObject) json.get(0));
+                items[i] = (String) jsonObject.get("nombre");
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, items);
+            spinner.setAdapter(adapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
         bSendaData = findViewById(R.id.bSendData);
@@ -57,10 +86,30 @@ public class DeviceControlCustomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
-                bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-                System.out.println();
-                System.out.println("Sale del intent");
+
+                JSONArray json = null;
+                try {
+                    json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
+                    int index = spinner.getSelectedItemPosition();
+                    JSONObject object = (JSONObject) json.get(index);
+                    FuncionesBackend.postInfo(tName.getText().toString(),object);
+                    Toast.makeText(getApplicationContext(),"Smart meter configurado", Toast.LENGTH_SHORT).show();
+
+                    while(FuncionesBackend.getTokenDispositivo() == null){
+                        System.out.println("Espera activa al token");
+                    }
+                    Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
+                    bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+
+                    //Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    //startActivity(i);
+
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
             }
         });
 

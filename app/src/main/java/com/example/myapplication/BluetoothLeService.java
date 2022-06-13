@@ -36,7 +36,10 @@ import android.util.Log;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import classes.FuncionesBackend;
 
@@ -45,7 +48,13 @@ import classes.FuncionesBackend;
  * given Bluetooth LE device.
  */
 public class BluetoothLeService extends Service {
+    private boolean libre = true;
     private final static String TAG = BluetoothLeService.class.getSimpleName();
+
+    private Queue<Runnable> commandQueue;
+    private boolean commandQueueBusy;
+
+    private boolean mDeviceBusy;
 
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
@@ -98,31 +107,58 @@ public class BluetoothLeService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             System.out.println("Services discovered");
+
             for(BluetoothGattService gattService : gatt.getServices()){
-                for (BluetoothGattCharacteristic characteristic : gattService.getCharacteristics()) {
+                for (BluetoothGattCharacteristic characteristic : gattService.getCharacteristics() ) {
                     Log.i(TAG, "onServicesDiscovered: characteristic=" + characteristic.getUuid());
+
+                    /*
                     // Mandas el SSID
                     if (characteristic.getUuid().toString().equals("6bfe5343-d32a-11ec-9d64-0242ac120002")) {
+
+                        System.out.println("Sale del while el wifi");
                         Log.w(TAG, "onServicesDiscovered: found SSID");
-                        //String originalString = FuncionesBackend.getWifi(getApplicationContext(),"password")[0];
-                        String originalString = "nombreWifi";
-                        byte[] b = hexStringToByteArray(originalString);
+                        String originalString = FuncionesBackend.getWifi(getApplicationContext());
+
+                        System.out.println("El WiFi conectado es : "+ FuncionesBackend.getWifi(getApplicationContext()));
                         characteristic.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
                         mBluetoothGatt.writeCharacteristic(characteristic);
                         System.out.println("Escribe la char de WIfi UUID");
-                        //Log.i(TAG, "onServicesDiscovered: , write bytes?! " + Utils.byteToHexStr(b));
+
                     }
                     // Mandas la passWord
                     if (characteristic.getUuid().toString().equals("760a51b2-d32a-11ec-9d64-0242ac120002")) {
+
+                        try {
+                            TimeUnit.SECONDS.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("Sale del while el pass");
+
                         Log.w(TAG, "onServicesDiscovered: found Password");
-                        //String originalString = FuncionesBackend.getWifi(getApplicationContext(),"password")[1];
-                        String originalString = "password";
-                        byte[] b = hexStringToByteArray(originalString);
+                        String originalString = FuncionesBackend.getPassword();
+                        System.out.println("Le escribe " + originalString);
                         characteristic.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
                         mBluetoothGatt.writeCharacteristic(characteristic);
                         System.out.println("Escribe la char de Password");
-                        //Log.i(TAG, "onServicesDiscovered: , write bytes?! " + Utils.byteToHexStr(b));
                     }
+
+                     */
+
+
+                    if(characteristic.getUuid().toString().equals("544f4b4e-d32a-11ec-9d64-0242ac120002")){
+                        Log.w(TAG, "onServicesDiscovered: found Token");
+                        //String originalString = FuncionesBackend.getTokenDispositivo();
+
+                        String originalString = "token";
+                        System.out.println("Le escribe "+ originalString);
+                        characteristic.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
+                        System.out.println("length de bytes: "+ originalString.getBytes(StandardCharsets.UTF_8).length);
+                        mBluetoothGatt.writeCharacteristic(characteristic);
+                        System.out.println("Escribe la char del Token");
+                    }
+
 
                 }            }
             if (status == BluetoothGatt.GATT_SUCCESS) {
@@ -131,7 +167,46 @@ public class BluetoothLeService extends Service {
                 Log.w(TAG, "onServicesDiscovered received: " + status);
             }
         }
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicWrite(gatt, characteristic, status);
+            System.out.println("Escribe cosas escribe");
+            System.out.println("Te llega " + characteristic.getUuid());
+            String s = characteristic.getUuid().toString();
+            if(characteristic.getUuid().equals("544f4b4e-d32a-11ec-9d64-0242ac120002"))
+                System.out.println("First done");
 
+
+            libre=true;
+            System.out.println("Se queda libre");
+            for(BluetoothGattService gattService : gatt.getServices()) {
+                for (BluetoothGattCharacteristic caracteristica : gattService.getCharacteristics()) {
+                    System.out.println("UUID"+ caracteristica.getUuid());
+                if(characteristic.getUuid().toString().equals("544f4b4e-d32a-11ec-9d64-0242ac120002") && caracteristica.getUuid().toString().equals("6bfe5343-d32a-11ec-9d64-0242ac120002")){
+                    System.out.println("Has vuelto a encontrar el Wifi");
+                    String originalString = FuncionesBackend.getWifi(getApplicationContext());
+                    System.out.println("El WiFi conectado es : "+ FuncionesBackend.getWifi(getApplicationContext()));
+                    caracteristica.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
+                    mBluetoothGatt.writeCharacteristic(caracteristica);
+                    System.out.println("Escribe la char de WIfi UUID");
+                }
+
+                if(characteristic.getUuid().toString().equals("6bfe5343-d32a-11ec-9d64-0242ac120002") && caracteristica.getUuid().toString().equals("760a51b2-d32a-11ec-9d64-0242ac120002")){
+                    Log.w(TAG, "onServicesDiscovered: found Password");
+                    String originalString = FuncionesBackend.getPassword();
+                    //String originalString = "enooooooooooooooooooooooooooooooooooooorrrrrrrrrrrmeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeenooooooooooooooooooooooooooooooooooooorrrrrrrrrrrmeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeenoooooooaaaaaaaaa" ;
+                    System.out.println("Le escribe " + originalString +" con length " + originalString.getBytes(StandardCharsets.UTF_8).length );
+                    caracteristica.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
+                    mBluetoothGatt.writeCharacteristic(caracteristica);
+                    System.out.println("Escribe la char de Password");
+
+                }
+
+                }
+            }
+
+
+        }
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
@@ -140,6 +215,8 @@ public class BluetoothLeService extends Service {
                 broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
             }
         }
+
+
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
