@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,11 @@ public class MeasureActivity extends AppCompatActivity {
             System.out.println("Lo que llega es "+ jsonObject.get("fecha").toString());
             Date date= dfISO.parse(jsonObject.get("fecha").toString());
             System.out.println("Date: "+ date);
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int month = cal.get(Calendar.MONTH);
+
 
             /*
             try {

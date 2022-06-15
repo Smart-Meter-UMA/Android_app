@@ -7,20 +7,22 @@
     tools:context=".MedicionesDatosActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="358dp"
-        android:layout_height="632dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="76dp"
+        android:id="@+id/constraintLayout"
+        android:layout_width="356dp"
+        android:layout_height="560dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/layout_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/textView10">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
-            android:layout_marginTop="92dp"
+            android:layout_marginTop="64dp"
             android:text="Máximo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,8 +51,8 @@
             android:id="@+id/imageView"
             android:layout_width="64dp"
             android:layout_height="51dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="148dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="104dp"
             app:layout_constraintStart_toEndOf="@+id/tMaximo"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/up_arrow_png_transparent_image" />
@@ -59,8 +61,8 @@
             android:id="@+id/imageView2"
             android:layout_width="67dp"
             android:layout_height="50dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="104dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="84dp"
             app:layout_constraintStart_toEndOf="@+id/tMinimo"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
             app:srcCompat="@drawable/down_arrow_png_transparent_picture" />
@@ -69,8 +71,8 @@
             android:id="@+id/imageView5"
             android:layout_width="67dp"
             android:layout_height="50dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="156dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="128dp"
             app:layout_constraintStart_toEndOf="@+id/tMedia"
             app:layout_constraintTop_toBottomOf="@+id/imageView2"
             app:srcCompat="@drawable/average" />
@@ -109,4 +111,35 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="28dp"
+        android:text="Datos de las mediciones"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bFiltrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        android:text="Filtrar por  mes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <Spinner
+        android:id="@+id/spMeses"
+        android:layout_width="144dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toEndOf="@+id/bFiltrar"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

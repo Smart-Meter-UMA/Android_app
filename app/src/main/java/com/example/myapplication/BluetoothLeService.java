@@ -149,9 +149,9 @@ public class BluetoothLeService extends Service {
 
                     if(characteristic.getUuid().toString().equals("544f4b4e-d32a-11ec-9d64-0242ac120002")){
                         Log.w(TAG, "onServicesDiscovered: found Token");
-                        //String originalString = FuncionesBackend.getTokenDispositivo();
+                        String originalString = FuncionesBackend.getTokenDispositivo();
 
-                        String originalString = "token";
+                        //String originalString = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MCwiaG9nYXIiOjEsIm93bmVyIjoyfQ.DD-3Gx3hXquPpEcnwEReMXq5rlwSusJXhXgattGudUs";
                         System.out.println("Le escribe "+ originalString);
                         characteristic.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
                         System.out.println("length de bytes: "+ originalString.getBytes(StandardCharsets.UTF_8).length);
