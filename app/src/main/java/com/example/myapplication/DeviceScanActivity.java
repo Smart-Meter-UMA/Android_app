@@ -115,7 +115,7 @@ public class DeviceScanActivity extends ListActivity {
         mLeDeviceListAdapter.clear();
     }
 
-    private void scanLeDevice(final boolean enable) {
+    private void scanLeDevice(final boolean enable){
 
         final ScanCallback scanCallback= new ScanCallback() {
             private boolean load = false;
