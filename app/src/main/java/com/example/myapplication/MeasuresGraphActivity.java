@@ -35,15 +35,14 @@ public class MeasuresGraphActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measures_graph);
-
+        /*
+        El botón bDatos lanza la actividad MedicionesDatosActivity, que muestra parámetros como el máximo, mínimo y la media.
+         */
         this.bDatos=findViewById(R.id.bDatos);
-        this.bDatos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), MedicionesDatosActivity.class);
-                i.putExtra("mes","TODOS");
-                startActivity(i);
-            }
+        this.bDatos.setOnClickListener(view -> {
+            Intent i = new Intent(getApplicationContext(), MedicionesDatosActivity.class);
+            i.putExtra("mes","TODOS");
+            startActivity(i);
         });
         graphView = findViewById(R.id.graph);
         graphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
@@ -61,19 +60,19 @@ public class MeasuresGraphActivity extends AppCompatActivity {
 
         try {
             addData();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (JSONException | ParseException e) {
             e.printStackTrace();
         }
 
 
-
-        //graphView.setTitle(" \n Lista de mediciones históricas para" + FuncionesBackend.getEmailGoogle());
-        //graphView.setTitleTextSize(48);
+        graphView.setTitle(" \n Lista de mediciones históricas para" + FuncionesBackend.getEmailGoogle());
+        graphView.setTitleTextSize(48);
 
     }
 
+    /*
+    NO ENTIENDO QUÉ HACE, ESPERO QUE FUNCIONE
+     */
     private void addData() throws JSONException, ParseException {
 
         JSONArray json = new JSONArray(FuncionesBackend.getResponseGetMedidas());

@@ -41,20 +41,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
+        //Crea un ActivityResultLauncher que lanza una actividad determinada, se usa posteriormente para el sing in
         ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            // There are no request codes
-                            System.out.println("LLega al result");
-                            Intent data = result.getData();
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        System.out.println("LLega al result");
+                        Intent data = result.getData();
 
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                        }
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     }
                 });
 
@@ -67,8 +64,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
-
         if(account != null){
             System.out.println("La acccount es " + account.getEmail());
             System.out.println("EL token es " + account.getIdToken());
@@ -80,23 +75,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         updateUI(account);
 
 
-        this.signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = mGoogleSignInClient.getSignInIntent();
-                someActivityResultLauncher.launch(i);
-                updateUI(account);
-            }
+        this.signInButton.setOnClickListener(view -> {
+            Intent i = mGoogleSignInClient.getSignInIntent();
+            someActivityResultLauncher.launch(i);
+            updateUI(account);
         });
 
-        this.signoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mGoogleSignInClient.signOut();
-                System.out.println("Sign out");
-                finish();
-                startActivity(getIntent());
-            }
+        this.signoutButton.setOnClickListener(view -> {
+            mGoogleSignInClient.signOut();
+            System.out.println("Sign out");
+            finish();
+            startActivity(getIntent());
         });
     }
     @Override
@@ -139,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Toast.makeText(this,"Error en el sign in", Toast.LENGTH_SHORT);
     }
 
     @Override

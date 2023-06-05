@@ -17,6 +17,9 @@ public class TimerActivity extends AppCompatActivity {
 
     private Timer timer = new Timer() ;
 
+    /*
+    Parece que compruba si hay una cuenta registrada y si es así hace un singOut porqué??
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

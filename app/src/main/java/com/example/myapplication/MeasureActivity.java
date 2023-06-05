@@ -40,6 +40,7 @@ public class MeasureActivity extends AppCompatActivity {
             //this.power.setText((String)(json.get(json.length()-1));
             JSONObject jsonObject= ((JSONObject) json.get(json.length()-1));
             System.out.println(jsonObject);
+
             this.power.setText(jsonObject.get("kw").toString() + "KW");
             System.out.println(this.power.getText());
 
@@ -51,24 +52,12 @@ public class MeasureActivity extends AppCompatActivity {
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
-            int month = cal.get(Calendar.MONTH);
-
-
-            /*
-            try {
-                date = df.parse(jsonObject.get("fecha").toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-             */
 
             this.fecha.setText(dfTxt.format(date));
 
         } catch (JSONException | ParseException e) {
             e.printStackTrace();
         }
-
-        // Falta asignar el valor a la potencia y a la fecha!!
 
         this.correo.setText(this.correo.getText().toString().replace("CORREO", FuncionesBackend.getEmailGoogle()));
 

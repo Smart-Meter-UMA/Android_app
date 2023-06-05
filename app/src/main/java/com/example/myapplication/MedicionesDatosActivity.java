@@ -86,11 +86,15 @@ public class MedicionesDatosActivity extends AppCompatActivity {
         }
 
 
+        /*
+        Asigna a cada textView su vista, además de al botón Filtrar y el Spinner de los Meses
+         */
         this.tMaximo=findViewById(R.id.tMaximo);
         this.tMinimo=findViewById(R.id.tMinimo);
         this.tMedia=findViewById(R.id.tMedia);
         this.bFiltrar=findViewById(R.id.bFiltrar);
         this.spMeses = findViewById(R.id.spMeses);
+
         String medidas = FuncionesBackend.getResponseGetMedidas();
         String[] items = new String[]{
           "TODOS",
@@ -126,20 +130,12 @@ public class MedicionesDatosActivity extends AppCompatActivity {
             this.tMinimo.setText(minimo);
             this.tMaximo.setText(maximo);
 
-
-            bFiltrar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(getApplicationContext(), MedicionesDatosActivity.class);
-                    i.putExtra("mes", spMeses.getSelectedItem().toString());
-                    startActivity(i);
-                    finish();
-                }
+            bFiltrar.setOnClickListener(view -> {
+                Intent i = new Intent(getApplicationContext(), MedicionesDatosActivity.class);
+                i.putExtra("mes", spMeses.getSelectedItem().toString());
+                startActivity(i);
+                finish();
             });
-
-
-
-
 
         } catch (JSONException | ParseException e) {
             e.printStackTrace();
@@ -169,23 +165,17 @@ public class MedicionesDatosActivity extends AppCompatActivity {
                 System.out.println("Es igual, add");
                 // Tienes que buscar cual es el object a borrar
                 res.put(jsonObject);
-
-
                 }
-
                 System.out.println("La lista tiene "+ indices);
-
-
         }
-
-
         System.out.println("El json al final es "+ res.toString());
-
-
         return res;
     }
 
 
+    /*
+    Métodos para calcular la media el máximo y el mínimo.
+     */
     private String calculaMedia(JSONArray json) throws JSONException {
 
         String media = "0";

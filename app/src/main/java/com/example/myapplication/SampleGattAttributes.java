@@ -23,7 +23,7 @@ import java.util.HashMap;
  *
  *
  *
- * ESTÁ CASI TODO HECHO, FALTA MODIFICAR LAS COSAS SE
+ *
  */
 public class SampleGattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
