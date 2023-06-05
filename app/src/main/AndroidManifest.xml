@@ -25,9 +25,6 @@
             android:name=".MedicionesDatosActivity"
             android:exported="false" />
         <activity
-            android:name=".ChartMedicionesActivity"
-            android:exported="false" />
-        <activity
             android:name=".TimerActivity"
             android:exported="true">
             <intent-filter>
