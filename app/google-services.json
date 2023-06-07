@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "724046535439",
-    "project_id": "kproject-349718",
-    "storage_bucket": "kproject-349718.appspot.com"
+    "project_number": "523829369104",
+    "project_id": "smart-meter-uma",
+    "storage_bucket": "smart-meter-uma.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:724046535439:android:c26072bf5b5b07e26abc7a",
+        "mobilesdk_app_id": "1:523829369104:android:e71d96167433074d66ad95",
         "android_client_info": {
-          "package_name": "com.example.myapplication"
+          "package_name": "es.uma.smartmeter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "724046535439-cch2rhprjcdak84a6id2jqckbt8d5ngf.apps.googleusercontent.com",
+          "client_id": "523829369104-u4dppvocnp3bmim4d5acfk8236j7lvo2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.myapplication",
-            "certificate_hash": "b5caeb55953b81c9f832b5099774fefe37c5ed6d"
+            "package_name": "es.uma.smartmeter",
+            "certificate_hash": "ff59d762e98ebb715cb387c7573a799c51527170"
           }
         },
         {
-          "client_id": "724046535439-g4gdj010v7qdkpbcpu7qq9edjt61nbva.apps.googleusercontent.com",
+          "client_id": "523829369104-ea6e5875hq438cmfrfvffiq58cm43oia.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC5tr8acaFQqG1TfZ5wNLSXtQlcpMnT4E4"
+          "current_key": "AIzaSyAwyd9TllVs6M9Z9fgox5n8zPFnbJuMMnI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "724046535439-g4gdj010v7qdkpbcpu7qq9edjt61nbva.apps.googleusercontent.com",
+              "client_id": "523829369104-6kbe49peq797qo4upc9l6dnenu0ipqhv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
