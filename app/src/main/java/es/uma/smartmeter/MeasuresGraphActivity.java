@@ -1,15 +1,13 @@
-package com.example.myapplication;
+package es.uma.smartmeter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -25,12 +23,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import classes.FuncionesBackend;
+import es.uma.smartmeter.utils.FuncionesBackend;
 
 public class MeasuresGraphActivity extends AppCompatActivity {
 
     private GraphView graphView;
     private Button bDatos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +37,10 @@ public class MeasuresGraphActivity extends AppCompatActivity {
         /*
         El botón bDatos lanza la actividad MedicionesDatosActivity, que muestra parámetros como el máximo, mínimo y la media.
          */
-        this.bDatos=findViewById(R.id.bDatos);
+        this.bDatos = findViewById(R.id.bDatos);
         this.bDatos.setOnClickListener(view -> {
             Intent i = new Intent(getApplicationContext(), MedicionesDatosActivity.class);
-            i.putExtra("mes","TODOS");
+            i.putExtra("mes", "TODOS");
             startActivity(i);
         });
         graphView = findViewById(R.id.graph);
@@ -76,22 +75,22 @@ public class MeasuresGraphActivity extends AppCompatActivity {
     private void addData() throws JSONException, ParseException {
 
         JSONArray json = new JSONArray(FuncionesBackend.getResponseGetMedidas());
-        System.out.println("Medidas: "+ FuncionesBackend.getResponseGetMedidas());
+        System.out.println("Medidas: " + FuncionesBackend.getResponseGetMedidas());
         DataPoint[] array = new DataPoint[5];
-        int j=0;
-        for(int i = json.length() -1;  i> json.length()-6;i--){
-            JSONObject jsonObject= ((JSONObject) json.get(i));
-            Double d = jsonObject.getDouble("kw");
+        int j = 0;
+        for (int i = json.length() - 1; i > json.length() - 6; i--) {
+            JSONObject jsonObject = ((JSONObject) json.get(i));
+            double d = jsonObject.getDouble("kw");
 
             SimpleDateFormat dfISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             SimpleDateFormat dfTxt = new SimpleDateFormat("dd/MM/yyyy");
-            Date date= dfISO.parse(jsonObject.get("fecha").toString());
+            Date date = dfISO.parse(jsonObject.get("fecha").toString());
             System.out.println(date.getTime());
 
             Date dateFinal = new Date(date.getTime());
             System.out.println(dateFinal);
-            System.out.println("Los valores son " + dateFinal.toString() +" : " + d);
-            DataPoint dt = new DataPoint(dateFinal,d);
+            System.out.println("Los valores son " + dateFinal + " : " + d);
+            DataPoint dt = new DataPoint(dateFinal, d);
             array[j] = dt;
             j++;
         }
@@ -101,19 +100,19 @@ public class MeasuresGraphActivity extends AppCompatActivity {
         System.out.println(list);
         Collections.reverse(list);
         System.out.println(list);
-        array=list.toArray(array);
-        System.out.println("Length"+array.length);
+        array = list.toArray(array);
+        System.out.println("Length" + array.length);
         showArray(array);
-        LineGraphSeries<DataPoint> points = new LineGraphSeries<DataPoint>(array);
+        LineGraphSeries<DataPoint> points = new LineGraphSeries<>(array);
         graphView.addSeries(points);
 
-}
+    }
 
     private void showArray(DataPoint[] array) {
-        System.out.println("Length "+ array.length);
-        for(int i=0;i< 5;i++) {
-            System.out.print("DataPointX: " +array[i].getX()+";");
-            System.out.println("DataPointY: "+array[i].getY());
+        System.out.println("Length " + array.length);
+        for (int i = 0; i < 5; i++) {
+            System.out.print("DataPointX: " + array[i].getX() + ";");
+            System.out.println("DataPointY: " + array[i].getY());
         }
     }
 

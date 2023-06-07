@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.myapplication;
-
-import static classes.FuncionesBackend.hexStringToByteArray;
+package es.uma.smartmeter;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -38,10 +36,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
-import classes.FuncionesBackend;
+import es.uma.smartmeter.utils.FuncionesBackend;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -108,8 +104,8 @@ public class BluetoothLeService extends Service {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             System.out.println("Services discovered");
 
-            for(BluetoothGattService gattService : gatt.getServices()){
-                for (BluetoothGattCharacteristic characteristic : gattService.getCharacteristics() ) {
+            for (BluetoothGattService gattService : gatt.getServices()) {
+                for (BluetoothGattCharacteristic characteristic : gattService.getCharacteristics()) {
                     Log.i(TAG, "onServicesDiscovered: characteristic=" + characteristic.getUuid());
 
                     /*
@@ -147,66 +143,69 @@ public class BluetoothLeService extends Service {
                      */
 
 
-                    if(characteristic.getUuid().toString().equals("544f4b4e-d32a-11ec-9d64-0242ac120002")){
+                    if (characteristic.getUuid().toString().equals("544f4b4e-d32a-11ec-9d64-0242ac120002")) {
                         Log.w(TAG, "onServicesDiscovered: found Token");
                         String originalString = FuncionesBackend.getTokenDispositivo();
 
                         //String originalString = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MCwiaG9nYXIiOjEsIm93bmVyIjoyfQ.DD-3Gx3hXquPpEcnwEReMXq5rlwSusJXhXgattGudUs";
-                        System.out.println("Le escribe "+ originalString);
+                        System.out.println("Le escribe " + originalString);
                         characteristic.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
-                        System.out.println("length de bytes: "+ originalString.getBytes(StandardCharsets.UTF_8).length);
+                        System.out.println("length de bytes: " + originalString.getBytes(StandardCharsets.UTF_8).length);
                         mBluetoothGatt.writeCharacteristic(characteristic);
                         System.out.println("Escribe la char del Token");
                     }
 
 
-                }            }
+                }
+            }
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
             } else {
                 Log.w(TAG, "onServicesDiscovered received: " + status);
             }
         }
+
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             super.onCharacteristicWrite(gatt, characteristic, status);
             System.out.println("Escribe cosas escribe");
             System.out.println("Te llega " + characteristic.getUuid());
             String s = characteristic.getUuid().toString();
-            if(characteristic.getUuid().equals("544f4b4e-d32a-11ec-9d64-0242ac120002"))
+            if (s.equals("544f4b4e-d32a-11ec-9d64-0242ac120002"))
                 System.out.println("First done");
 
 
-            libre=true;
+            libre = true;
             System.out.println("Se queda libre");
-            for(BluetoothGattService gattService : gatt.getServices()) {
+            for (BluetoothGattService gattService : gatt.getServices()) {
                 for (BluetoothGattCharacteristic caracteristica : gattService.getCharacteristics()) {
-                    System.out.println("UUID"+ caracteristica.getUuid());
-                if(characteristic.getUuid().toString().equals("544f4b4e-d32a-11ec-9d64-0242ac120002") && caracteristica.getUuid().toString().equals("6bfe5343-d32a-11ec-9d64-0242ac120002")){
-                    System.out.println("Has vuelto a encontrar el Wifi");
-                    String originalString = FuncionesBackend.getWifi(getApplicationContext());
-                    System.out.println("El WiFi conectado es : "+ FuncionesBackend.getWifi(getApplicationContext()));
-                    caracteristica.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
-                    mBluetoothGatt.writeCharacteristic(caracteristica);
-                    System.out.println("Escribe la char de WIfi UUID");
-                }
+                    System.out.println("UUID" + caracteristica.getUuid());
+                    if (characteristic.getUuid().toString().equals("544f4b4e-d32a-11ec-9d64-0242ac120002") && caracteristica.getUuid().toString().equals("6bfe5343-d32a-11ec-9d64-0242ac120002")) {
+                        System.out.println("Has vuelto a encontrar el Wifi");
+                        String originalString = FuncionesBackend.getWifi(getApplicationContext());
+                        System.out.println("El WiFi conectado es : " + FuncionesBackend.getWifi(getApplicationContext()));
+                        caracteristica.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
+                        mBluetoothGatt.writeCharacteristic(caracteristica);
+                        System.out.println("Escribe la char de WIfi UUID");
+                    }
 
-                if(characteristic.getUuid().toString().equals("6bfe5343-d32a-11ec-9d64-0242ac120002") && caracteristica.getUuid().toString().equals("760a51b2-d32a-11ec-9d64-0242ac120002")){
-                    Log.w(TAG, "onServicesDiscovered: found Password");
-                    String originalString = FuncionesBackend.getPassword();
-                    //String originalString = "enooooooooooooooooooooooooooooooooooooorrrrrrrrrrrmeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeenooooooooooooooooooooooooooooooooooooorrrrrrrrrrrmeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeenoooooooaaaaaaaaa" ;
-                    System.out.println("Le escribe " + originalString +" con length " + originalString.getBytes(StandardCharsets.UTF_8).length );
-                    caracteristica.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
-                    mBluetoothGatt.writeCharacteristic(caracteristica);
-                    System.out.println("Escribe la char de Password");
+                    if (characteristic.getUuid().toString().equals("6bfe5343-d32a-11ec-9d64-0242ac120002") && caracteristica.getUuid().toString().equals("760a51b2-d32a-11ec-9d64-0242ac120002")) {
+                        Log.w(TAG, "onServicesDiscovered: found Password");
+                        String originalString = FuncionesBackend.getPassword();
+                        //String originalString = "enooooooooooooooooooooooooooooooooooooorrrrrrrrrrrmeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeenooooooooooooooooooooooooooooooooooooorrrrrrrrrrrmeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeenoooooooaaaaaaaaa" ;
+                        System.out.println("Le escribe " + originalString + " con length " + originalString.getBytes(StandardCharsets.UTF_8).length);
+                        caracteristica.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
+                        mBluetoothGatt.writeCharacteristic(caracteristica);
+                        System.out.println("Escribe la char de Password");
 
-                }
+                    }
 
                 }
             }
 
 
         }
+
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
@@ -215,7 +214,6 @@ public class BluetoothLeService extends Service {
                 broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
             }
         }
-
 
 
         @Override
@@ -255,9 +253,9 @@ public class BluetoothLeService extends Service {
             final byte[] data = characteristic.getValue();
             if (data != null && data.length > 0) {
                 final StringBuilder stringBuilder = new StringBuilder(data.length);
-                for(byte byteChar : data)
+                for (byte byteChar : data)
                     stringBuilder.append(String.format("%02X ", byteChar));
-                intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
+                intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder);
             }
         }
         sendBroadcast(intent);
@@ -314,11 +312,10 @@ public class BluetoothLeService extends Service {
      * Connects to the GATT server hosted on the Bluetooth LE device.
      *
      * @param address The device address of the destination device.
-     *
      * @return Return true if the connection is initiated successfully. The connection result
-     *         is reported asynchronously through the
-     *         {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
-     *         callback.
+     * is reported asynchronously through the
+     * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
+     * callback.
      */
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
@@ -327,7 +324,7 @@ public class BluetoothLeService extends Service {
         }
 
         // Previously connected device.  Try to reconnect.
-        if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
+        if (address.equals(mBluetoothDeviceAddress)
                 && mBluetoothGatt != null) {
             Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
@@ -397,7 +394,7 @@ public class BluetoothLeService extends Service {
      * Enables or disables notification on a give characteristic.
      *
      * @param characteristic Characteristic to act on.
-     * @param enabled If true, enable notification.  False otherwise.
+     * @param enabled        If true, enable notification.  False otherwise.
      */
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
                                               boolean enabled) {

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package es.uma.smartmeter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,12 +11,10 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import classes.FuncionesBackend;
+import es.uma.smartmeter.utils.FuncionesBackend;
 
 public class MeasureActivity extends AppCompatActivity {
 
@@ -34,21 +32,21 @@ public class MeasureActivity extends AppCompatActivity {
         this.power = findViewById(R.id.tPower);
 
 
-        System.out.println("La response es "+FuncionesBackend.getResponseGetMedidas());
+        System.out.println("La response es " + FuncionesBackend.getResponseGetMedidas());
         try {
             JSONArray json = new JSONArray(FuncionesBackend.getResponseGetMedidas());
             //this.power.setText((String)(json.get(json.length()-1));
-            JSONObject jsonObject= ((JSONObject) json.get(json.length()-1));
+            JSONObject jsonObject = ((JSONObject) json.get(json.length() - 1));
             System.out.println(jsonObject);
 
-            this.power.setText(jsonObject.get("kw").toString() + "KW");
+            this.power.setText(jsonObject.get("kw") + "KW");
             System.out.println(this.power.getText());
 
             SimpleDateFormat dfISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             SimpleDateFormat dfTxt = new SimpleDateFormat("dd/MM/yyyy");
-            System.out.println("Lo que llega es "+ jsonObject.get("fecha").toString());
-            Date date= dfISO.parse(jsonObject.get("fecha").toString());
-            System.out.println("Date: "+ date);
+            System.out.println("Lo que llega es " + jsonObject.get("fecha"));
+            Date date = dfISO.parse(jsonObject.get("fecha").toString());
+            System.out.println("Date: " + date);
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);

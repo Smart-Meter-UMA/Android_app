@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package es.uma.smartmeter;
 
 import org.junit.Test;
 

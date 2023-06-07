@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package es.uma.smartmeter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,7 +20,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import classes.FuncionesBackend;
+import es.uma.smartmeter.utils.FuncionesBackend;
 
 public class DeviceControlBLEActivity extends AppCompatActivity {
 
@@ -47,7 +46,7 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_control_custom);
 
-        Toast.makeText(this, "Smart meter encontrado =D",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Smart meter encontrado =D", Toast.LENGTH_LONG).show();
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -65,11 +64,11 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
         try {
             JSONArray json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
             //this.power.setText((String)(json.get(json.length()-1));
-            JSONObject jsonObject= ((JSONObject) json.get(0));
-            String [] items= new String[json.length()];
+            JSONObject jsonObject = ((JSONObject) json.get(0));
+            String[] items = new String[json.length()];
             System.out.println(FuncionesBackend.getGetResponseGetHogares());
-            for(int i=0 ; i < json.length(); i++){
-                jsonObject= ((JSONObject) json.get(0));
+            for (int i = 0; i < json.length(); i++) {
+                jsonObject = ((JSONObject) json.get(0));
                 items[i] = (String) jsonObject.get("nombre");
             }
 
@@ -87,15 +86,15 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                JSONArray json = null;
+                JSONArray json;
                 try {
                     json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
                     int index = spinner.getSelectedItemPosition();
                     JSONObject object = (JSONObject) json.get(index);
-                    FuncionesBackend.postInfo(tName.getText().toString(),object);
-                    Toast.makeText(getApplicationContext(),"Smart meter configurado", Toast.LENGTH_SHORT).show();
+                    FuncionesBackend.postInfo(tName.getText().toString(), object);
+                    Toast.makeText(getApplicationContext(), "Smart meter configurado", Toast.LENGTH_SHORT).show();
 
-                    while(FuncionesBackend.getTokenDispositivo() == null){
+                    while (FuncionesBackend.getTokenDispositivo() == null) {
                         System.out.println("Espera activa al token");
                     }
                     Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
@@ -109,10 +108,8 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
                 }
 
 
-
             }
         });
-
 
 
     }
@@ -120,7 +117,7 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
-            System.out.println("LLega aqui");
+            System.out.println("Llega aqui");
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             if (!mBluetoothLeService.initialize()) {
                 //Log.e(TAG, "Unable to initialize Bluetooth");
@@ -141,9 +138,8 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
 
 
     @Override
-    public void onBackPressed()
-    {
-        Intent intent = new Intent(this,MainActivity.class);
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

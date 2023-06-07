@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.myapplication;
+package es.uma.smartmeter;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -45,22 +45,22 @@ public class DeviceScanActivity extends ListActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private Handler mHandler;
-    private Toast toast = null;
+    private final Toast toast = null;
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
 
     public void hideToast() {
-        if(this.toast != null)
-        this.toast.cancel();
+        if (this.toast != null)
+            this.toast.cancel();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHandler = new Handler();
-        this.toast.makeText(this, "Buscando smart meter",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Buscando smart meter", Toast.LENGTH_SHORT).show();
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -80,9 +80,9 @@ public class DeviceScanActivity extends ListActivity {
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
             finish();
-            return;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -115,17 +115,18 @@ public class DeviceScanActivity extends ListActivity {
         mLeDeviceListAdapter.clear();
     }
 
-    private void scanLeDevice(final boolean enable){
+    private void scanLeDevice(final boolean enable) {
 
-        final ScanCallback scanCallback= new ScanCallback() {
+        final ScanCallback scanCallback = new ScanCallback() {
             private boolean load = false;
+
             public void onScanResult(int callbackType, ScanResult result) {
-                super.onScanResult(callbackType,result);
+                super.onScanResult(callbackType, result);
                 BluetoothDevice btDevice = result.getDevice();
-                if(btDevice.getName() != null ){
-                    if( btDevice.getName().equals("SmartMeter") && !load){
+                if (btDevice.getName() != null) {
+                    if (btDevice.getName().equals("SmartMeter") && !load) {
                         System.out.println("Dispositivo " + btDevice.getName());
-                        load=true;
+                        load = true;
                         final Intent intent = new Intent(getApplicationContext(), DeviceControlBLEActivity.class);
                         intent.putExtra(DeviceControlBLEActivity.EXTRAS_DEVICE_NAME, btDevice.getName());
                         intent.putExtra(DeviceControlBLEActivity.EXTRAS_DEVICE_ADDRESS, btDevice.getAddress());
@@ -158,17 +159,13 @@ public class DeviceScanActivity extends ListActivity {
         };
 
 
-
         if (enable) {
             // Stops scanning after a pre-defined scan period.
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScanning = false;
-                    //mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    mBluetoothAdapter.getBluetoothLeScanner().stopScan(scanCallback);
-                    invalidateOptionsMenu();
-                }
+            mHandler.postDelayed(() -> {
+                mScanning = false;
+                //mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                mBluetoothAdapter.getBluetoothLeScanner().stopScan(scanCallback);
+                invalidateOptionsMenu();
             }, SCAN_PERIOD);
 
 
@@ -190,8 +187,8 @@ public class DeviceScanActivity extends ListActivity {
 
     // Adapter for holding devices found through scanning.
     private class LeDeviceListAdapter {
-        private ArrayList<BluetoothDevice> mLeDevices;
-        private LayoutInflater mInflator;
+        private final ArrayList<BluetoothDevice> mLeDevices;
+        private final LayoutInflater mInflator;
 
         public LeDeviceListAdapter() {
             super();
@@ -200,7 +197,7 @@ public class DeviceScanActivity extends ListActivity {
         }
 
         public void addDevice(BluetoothDevice device) {
-            if(!mLeDevices.contains(device)) {
+            if (!mLeDevices.contains(device)) {
                 mLeDevices.add(device);
             }
         }
@@ -215,12 +212,12 @@ public class DeviceScanActivity extends ListActivity {
     }
 
     // Device scan callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+    private final BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
 
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-                    System.out.println("LLega aqui");
+                    System.out.println("Llega aqui");
 
                     runOnUiThread(new Runnable() {
                         @Override

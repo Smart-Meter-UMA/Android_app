@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package es.uma.smartmeter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +15,7 @@ import java.util.TimerTask;
 
 public class TimerActivity extends AppCompatActivity {
 
-    private Timer timer = new Timer() ;
+    private final Timer timer = new Timer();
 
     /*
     Parece que compruba si hay una cuenta registrada y si es así hace un singOut porqué??
@@ -26,17 +26,17 @@ public class TimerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("724046535439-h28ieq17aff119i367el50skelqkdgh4.apps.googleusercontent.com")
+                .requestIdToken("523829369104-ea6e5875hq438cmfrfvffiq58cm43oia.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account != null) mGoogleSignInClient.signOut();
+        if (account != null) mGoogleSignInClient.signOut();
         System.out.println("Logout");
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         timer.schedule(new TimerTask() {
             @Override

@@ -1,9 +1,8 @@
-package classes;
+package es.uma.smartmeter.utils;
 
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.toolbox.StringRequest;
@@ -13,13 +12,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,8 +28,8 @@ import com.android.volley.toolbox.Volley;
 
 public class FuncionesBackend {
 
-    private static String urlPOST= "kproject/POST";
-    private static String urlGET = "kproject/GET" ;
+    private static final String urlPOST = "kproject/POST";
+    private static final String urlGET = "kproject/GET";
     private static String responseGetMedidas;
     private static String getResponseGetHogares;
     private static String tokenGoogle;
@@ -74,7 +71,7 @@ public class FuncionesBackend {
         return data;
     }
 
-    public static String getWifi(Context context){
+    public static String getWifi(Context context) {
 
 
         WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -93,29 +90,29 @@ public class FuncionesBackend {
 
     public static String postInfo(String nombre, JSONObject hogar) throws IOException, JSONException {
 
-            URL url = new URL("https://api-kproject.herokuapp.com/kproject/dispositivos/");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        URL url = new URL("https://api-kproject.herokuapp.com/kproject/dispositivos/");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            conn.setRequestProperty("Accept","application/json");
-            conn.setRequestProperty("Authorization", getTokenGoogle());
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+        conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("Authorization", getTokenGoogle());
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-            // Aquí se escribiraán los datos que sean necesarios
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("nombre", nombre);
-            jsonObject.put("hogar", hogar);
-            System.out.println("El json es " + jsonObject.toString());
-            writer.write(jsonObject.toString());
-            System.out.println("Ha escrito");
+        // Aquí se escribiraán los datos que sean necesarios
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("nombre", nombre);
+        jsonObject.put("hogar", hogar);
+        System.out.println("El json es " + jsonObject);
+        writer.write(jsonObject.toString());
+        System.out.println("Ha escrito");
 
-            writer.flush();
-            writer.close();
+        writer.flush();
+        writer.close();
 
-        System.out.println("Response code:" +conn.getResponseCode());
+        System.out.println("Response code:" + conn.getResponseCode());
         String json_response = "";
         InputStreamReader in = new InputStreamReader(conn.getInputStream());
         BufferedReader br = new BufferedReader(in);
@@ -123,46 +120,45 @@ public class FuncionesBackend {
         while ((text = br.readLine()) != null) {
             json_response += text;
         }
-        System.out.println("La response es: "+ json_response);
+        System.out.println("La response es: " + json_response);
         br.close();
 
-            JSONObject jsonObjectToken = new JSONObject(json_response);
-            setTokenDispositivo(jsonObjectToken.getString("token"));
+        JSONObject jsonObjectToken = new JSONObject(json_response);
+        setTokenDispositivo(jsonObjectToken.getString("token"));
 
         System.out.println("El token nuevo es " + getTokenDispositivo());
-            conn.disconnect();
-            return conn.getResponseMessage();
-}
+        conn.disconnect();
+        return conn.getResponseMessage();
+    }
 
-        public static void getRequestMedidas(Context context){
-            RequestQueue ExampleRequestQueue = Volley.newRequestQueue(context);
-                String url = "https://api-kproject.herokuapp.com/kproject/medidas";
+    public static void getRequestMedidas(Context context) {
+        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(context);
+        String url = "https://api-kproject.herokuapp.com/kproject/medidas";
 
-                StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String r) {
-                                //This code is executed if the server responds, whether or not the response contains data.
-                                setResponseGetMedidas(r);
-                        }
-                }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                                //This code is executed if there is an error.
-                        }
-                })
-                {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("Authorization", tokenGoogle);
-                        return params;
-                    }
-                };
-                ExampleRequestQueue.add(ExampleStringRequest);
-        }
+        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String r) {
+                //This code is executed if the server responds, whether or not the response contains data.
+                setResponseGetMedidas(r);
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //This code is executed if there is an error.
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", tokenGoogle);
+                return params;
+            }
+        };
+        ExampleRequestQueue.add(ExampleStringRequest);
+    }
 
 
-    public static void getRequestHogares(Context context){
+    public static void getRequestHogares(Context context) {
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(context);
         String url = "https://api-kproject.herokuapp.com/kproject/hogars";
 
@@ -177,8 +173,7 @@ public class FuncionesBackend {
             public void onErrorResponse(VolleyError error) {
                 //This code is executed if there is an error.
             }
-        })
-        {
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();

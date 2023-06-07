@@ -1,11 +1,10 @@
-package com.example.myapplication;
+package es.uma.smartmeter;
 
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,12 +15,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
-import classes.FuncionesBackend;
+import es.uma.smartmeter.utils.FuncionesBackend;
 
 /* La actividad MainActivity es en la que aparece el menú principal, y se compone de varios
  botones para saltar a otras actividades. */
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
      - ActivityResultCallback define las acciones que se llevan a cabo si el permiso es aceptado o denegado,
             en este caso en concreto se imprime en pantalla el resultado.
     */
-    private ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
+    private final ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
             result -> {
                 if (result) {
@@ -73,12 +73,12 @@ public class MainActivity extends AppCompatActivity {
         this.mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("724046535439-h28ieq17aff119i367el50skelqkdgh4.apps.googleusercontent.com")
+                .requestIdToken("523829369104-ea6e5875hq438cmfrfvffiq58cm43oia.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account != null) {
+        if (account != null) {
             System.out.println("Saca las medidas");
             FuncionesBackend.getRequestMedidas(getApplicationContext());
             System.out.println("Saca los hogares");
@@ -101,10 +101,10 @@ public class MainActivity extends AppCompatActivity {
          */
         bTest.setOnClickListener(view -> {
             System.out.println("El token es " + FuncionesBackend.getTokenGoogle());
-            System.out.println("El wifi es "+ FuncionesBackend.getWifi(getApplicationContext()));
+            System.out.println("El wifi es " + FuncionesBackend.getWifi(getApplicationContext()));
 
             FuncionesBackend.getRequestMedidas(MainActivity.this);
-            System.out.println("La response es "+FuncionesBackend.getResponseGetMedidas());
+            System.out.println("La response es " + FuncionesBackend.getResponseGetMedidas());
         });
 
 
@@ -115,16 +115,15 @@ public class MainActivity extends AppCompatActivity {
         Si la contraseña es correcta, lanza la actividad DeviceScannActivity
         */
         bConnect.setOnClickListener(view -> {
-            if(account == null) Toast.makeText(getApplicationContext(),INICIA_SESION, Toast.LENGTH_SHORT).show();
-            else if(FuncionesBackend.getResponseGetMedidas() == null  ) {
-                Toast.makeText(getApplicationContext(),EXTRAYENDO_MEDICIONES, Toast.LENGTH_SHORT).show();
+            if (account == null)
+                Toast.makeText(getApplicationContext(), INICIA_SESION, Toast.LENGTH_SHORT).show();
+            else if (FuncionesBackend.getResponseGetMedidas() == null) {
+                Toast.makeText(getApplicationContext(), EXTRAYENDO_MEDICIONES, Toast.LENGTH_SHORT).show();
                 FuncionesBackend.getRequestHogares(getApplicationContext());
-            }
-            else if(FuncionesBackend.getGetResponseGetHogares() == null){
-                FuncionesBackend.getRequestHogares(getApplicationContext()) ;
-                Toast.makeText(getApplicationContext(),EXTRAYENDO_HOGARES, Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else if (FuncionesBackend.getGetResponseGetHogares() == null) {
+                FuncionesBackend.getRequestHogares(getApplicationContext());
+                Toast.makeText(getApplicationContext(), EXTRAYENDO_HOGARES, Toast.LENGTH_SHORT).show();
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
                 builder.setTitle("Contraseña");
                 builder.setMessage("Introduzca la contraseña del WiFi");
@@ -156,15 +155,15 @@ public class MainActivity extends AppCompatActivity {
 
         bGraficas.setOnClickListener(view -> {
 
-            if(account == null) Toast.makeText(getApplicationContext(),INICIA_SESION, Toast.LENGTH_SHORT).show();
-            else if(FuncionesBackend.getResponseGetMedidas() == null  ) {
-                Toast.makeText(getApplicationContext(),EXTRAYENDO_MEDICIONES, Toast.LENGTH_SHORT).show();
+            if (account == null)
+                Toast.makeText(getApplicationContext(), INICIA_SESION, Toast.LENGTH_SHORT).show();
+            else if (FuncionesBackend.getResponseGetMedidas() == null) {
+                Toast.makeText(getApplicationContext(), EXTRAYENDO_MEDICIONES, Toast.LENGTH_SHORT).show();
                 FuncionesBackend.getRequestMedidas(getApplicationContext());
-            }
-            else if(FuncionesBackend.getGetResponseGetHogares() == null){
-                FuncionesBackend.getRequestHogares(getApplicationContext()) ;
-                Toast.makeText(getApplicationContext(),EXTRAYENDO_HOGARES, Toast.LENGTH_SHORT).show();
-            }else {
+            } else if (FuncionesBackend.getGetResponseGetHogares() == null) {
+                FuncionesBackend.getRequestHogares(getApplicationContext());
+                Toast.makeText(getApplicationContext(), EXTRAYENDO_HOGARES, Toast.LENGTH_SHORT).show();
+            } else {
                 Intent i = new Intent(getApplicationContext(), MeasuresGraphActivity.class);
                 startActivity(i);
             }
@@ -177,19 +176,19 @@ public class MainActivity extends AppCompatActivity {
          */
         bMeasure.setOnClickListener(view -> {
 
-            if(account == null) Toast.makeText(getApplicationContext(),INICIA_SESION, Toast.LENGTH_SHORT).show();
-            else if(FuncionesBackend.getResponseGetMedidas() == null  ) {
-                Toast.makeText(getApplicationContext(),EXTRAYENDO_MEDICIONES, Toast.LENGTH_SHORT).show();
+            if (account == null)
+                Toast.makeText(getApplicationContext(), INICIA_SESION, Toast.LENGTH_SHORT).show();
+            else if (FuncionesBackend.getResponseGetMedidas() == null) {
+                Toast.makeText(getApplicationContext(), EXTRAYENDO_MEDICIONES, Toast.LENGTH_SHORT).show();
                 FuncionesBackend.getRequestHogares(getApplicationContext());
-                System.out.println("Medidas"+ FuncionesBackend.getResponseGetMedidas());
-            }
-            else if(FuncionesBackend.getGetResponseGetHogares() == null){
-                FuncionesBackend.getRequestHogares(getApplicationContext()) ;
-                System.out.println("Hogares: "+FuncionesBackend.getGetResponseGetHogares());
-                Toast.makeText(getApplicationContext(),EXTRAYENDO_HOGARES, Toast.LENGTH_SHORT).show();
-            }else {
+                System.out.println("Medidas" + FuncionesBackend.getResponseGetMedidas());
+            } else if (FuncionesBackend.getGetResponseGetHogares() == null) {
+                FuncionesBackend.getRequestHogares(getApplicationContext());
+                System.out.println("Hogares: " + FuncionesBackend.getGetResponseGetHogares());
+                Toast.makeText(getApplicationContext(), EXTRAYENDO_HOGARES, Toast.LENGTH_SHORT).show();
+            } else {
 
-                Intent i = new Intent(getApplicationContext(),MeasureActivity.class);
+                Intent i = new Intent(getApplicationContext(), MeasureActivity.class);
                 startActivity(i);
             }
         });
@@ -197,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         El botón bLogin lanza la actividad LoginActivity (no comprueba nada pues es para hacer el login)
          */
         bLogin.setOnClickListener(view -> {
-            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(i);
 
         });

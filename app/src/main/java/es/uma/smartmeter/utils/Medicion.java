@@ -1,4 +1,4 @@
-package classes;
+package es.uma.smartmeter.utils;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -9,7 +9,7 @@ public class Medicion {
     private double voltaje;
     private double potencia;
     private Date fecha;
-    private String fechaString;
+    private final String fechaString;
 
     public Medicion(double intensidad, double voltaje){
         this.fechaString=new SimpleDateFormat("MM/DD/YY HH:MM:SS").format(this.fecha);
