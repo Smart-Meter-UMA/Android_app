@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "523829369104-694g8d5k562lvrrdn7v8s74rud30laka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "es.uma.smartmeter",
+            "certificate_hash": "5e125b48d4ce69c046ae3e191a78e329317903e3"
+          }
+        },
+        {
+          "client_id": "523829369104-mv4mb9fgt0nv4254ks2qco37fsvhdbat.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "es.uma.smartmeter",
+            "certificate_hash": "f6140cad5f5a04ea560a99e3f764b00382d0da5a"
+          }
+        },
+        {
           "client_id": "523829369104-u4dppvocnp3bmim4d5acfk8236j7lvo2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

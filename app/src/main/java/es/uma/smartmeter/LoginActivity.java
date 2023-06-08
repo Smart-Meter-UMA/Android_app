@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         this.signInButton = findViewById(R.id.sign_in_button);
         this.signoutButton = findViewById(R.id.bSignOut);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken("523829369104-ea6e5875hq438cmfrfvffiq58cm43oia.apps.googleusercontent.com").requestEmail().build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
