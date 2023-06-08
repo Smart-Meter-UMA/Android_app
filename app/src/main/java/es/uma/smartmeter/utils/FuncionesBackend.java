@@ -22,8 +22,6 @@ import java.util.Map;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 public class FuncionesBackend {
@@ -135,17 +133,10 @@ public class FuncionesBackend {
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(context);
         String url = "https://api-kproject.herokuapp.com/kproject/medidas";
 
-        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String r) {
-                //This code is executed if the server responds, whether or not the response contains data.
-                setResponseGetMedidas(r);
-            }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //This code is executed if there is an error.
-            }
+        //This code is executed if the server responds, whether or not the response contains data.
+        //Create an error listener to handle errors appropriately.
+        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, FuncionesBackend::setResponseGetMedidas, error -> {
+            //This code is executed if there is an error.
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -162,21 +153,14 @@ public class FuncionesBackend {
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(context);
         String url = "https://api-kproject.herokuapp.com/kproject/hogars";
 
-        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String r) {
-                //This code is executed if the server responds, whether or not the response contains data.
-                setGetResponseGetHogares(r);
-            }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //This code is executed if there is an error.
-            }
+        //Create an error listener to handle errors appropriately.
+        //This code is executed if the server responds, whether or not the response contains data.
+        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, FuncionesBackend::setGetResponseGetHogares, error -> {
+            //This code is executed if there is an error.
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("Authorization", tokenGoogle);
                 return params;
             }

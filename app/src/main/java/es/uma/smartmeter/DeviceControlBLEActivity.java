@@ -64,7 +64,7 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
         try {
             JSONArray json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
             //this.power.setText((String)(json.get(json.length()-1));
-            JSONObject jsonObject = ((JSONObject) json.get(0));
+            JSONObject jsonObject;
             String[] items = new String[json.length()];
             System.out.println(FuncionesBackend.getGetResponseGetHogares());
             for (int i = 0; i < json.length(); i++) {
@@ -80,35 +80,31 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
 
 
         bSendaData = findViewById(R.id.bSendData);
-        bSendaData.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
+        bSendaData.setOnClickListener(view -> {
 
 
-                JSONArray json;
-                try {
-                    json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
-                    int index = spinner.getSelectedItemPosition();
-                    JSONObject object = (JSONObject) json.get(index);
-                    FuncionesBackend.postInfo(tName.getText().toString(), object);
-                    Toast.makeText(getApplicationContext(), "Smart meter configurado", Toast.LENGTH_SHORT).show();
+            JSONArray json;
+            try {
+                json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
+                int index = spinner.getSelectedItemPosition();
+                JSONObject object = (JSONObject) json.get(index);
+                FuncionesBackend.postInfo(tName.getText().toString(), object);
+                Toast.makeText(getApplicationContext(), "Smart meter configurado", Toast.LENGTH_SHORT).show();
 
-                    while (FuncionesBackend.getTokenDispositivo() == null) {
-                        System.out.println("Espera activa al token");
-                    }
-                    Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
-                    bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
-                    //Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    //startActivity(i);
-
-                } catch (JSONException | IOException e) {
-                    e.printStackTrace();
+                while (FuncionesBackend.getTokenDispositivo() == null) {
+                    System.out.println("Espera activa al token");
                 }
+                Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
+                bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
+                //Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                //startActivity(i);
 
+            } catch (JSONException | IOException e) {
+                e.printStackTrace();
             }
+
+
         });
 
 

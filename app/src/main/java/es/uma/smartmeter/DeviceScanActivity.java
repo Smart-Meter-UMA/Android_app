@@ -192,7 +192,7 @@ public class DeviceScanActivity extends ListActivity {
 
         public LeDeviceListAdapter() {
             super();
-            mLeDevices = new ArrayList<BluetoothDevice>();
+            mLeDevices = new ArrayList<>();
             mInflator = DeviceScanActivity.this.getLayoutInflater();
         }
 
@@ -219,12 +219,9 @@ public class DeviceScanActivity extends ListActivity {
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
                     System.out.println("Llega aqui");
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println("El device es" + device.getName());
-                            mLeDeviceListAdapter.addDevice(device);
-                        }
+                    runOnUiThread(() -> {
+                        System.out.println("El device es" + device.getName());
+                        mLeDeviceListAdapter.addDevice(device);
                     });
                 }
             };
