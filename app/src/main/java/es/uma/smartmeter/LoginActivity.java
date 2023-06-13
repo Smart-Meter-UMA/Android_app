@@ -113,6 +113,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             FuncionesBackend.setEmailGoogle(account.getEmail());
             this.signInButton.setVisibility(View.GONE);
             this.signoutButton.setVisibility(View.VISIBLE);
+
+            Intent intent = new Intent(getApplicationContext(), NavigationBar.class);
+            startActivity(intent);
         }
     }
 
