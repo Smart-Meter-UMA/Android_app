@@ -53,7 +53,7 @@ public class MeasureActivity extends AppCompatActivity {
 
             this.fecha.setText(dfTxt.format(date));
 
-        } catch (JSONException | ParseException e) {
+        } catch (JSONException | ParseException | NullPointerException e) {
             e.printStackTrace();
         }
 

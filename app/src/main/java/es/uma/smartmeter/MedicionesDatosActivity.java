@@ -133,7 +133,7 @@ public class MedicionesDatosActivity extends AppCompatActivity {
                 finish();
             });
 
-        } catch (JSONException | ParseException e) {
+        } catch (JSONException | ParseException | NullPointerException e) {
             e.printStackTrace();
         }
 

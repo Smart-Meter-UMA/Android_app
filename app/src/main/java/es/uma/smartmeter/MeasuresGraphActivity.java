@@ -59,13 +59,13 @@ public class MeasuresGraphActivity extends AppCompatActivity {
 
         try {
             addData();
-        } catch (JSONException | ParseException e) {
+        } catch (JSONException | ParseException | NullPointerException e) {
             e.printStackTrace();
         }
 
 
-        graphView.setTitle(" \n Lista de mediciones históricas para" + FuncionesBackend.getEmailGoogle());
-        graphView.setTitleTextSize(48);
+        graphView.setTitle(" \n Lista de mediciones históricas para " + FuncionesBackend.getEmailGoogle());
+        graphView.setTitleTextSize(28);
 
     }
 

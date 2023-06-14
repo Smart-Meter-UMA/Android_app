@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
         /*
         El botón bConnect comprueba si se ha iniciado sesión y si los parámetros GetResponseHogares y ...ResponseMedidas de FuncionesBackend no son nulos.
-        TODO esto último no parece que tenga mucho sentido, necesita la wifi para empezar a extraer mediciones y hogares, pero si no tiene mediciones ni hogares no puede concectarse a la wifi
         Si es así, lanza un cuadro de diálogo para pedir la contraseña wifi, y dos botones, uno para aceptar y otro para cancelar.GetResponseHogares y ...ResponseMedidas de FuncionesBackend no son nulos
         Si la contraseña es correcta, lanza la actividad DeviceScannActivity
         */
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 builder.setView(input);
 
-                //Si la contraseña es correcta se lanza una nueva actividad DevideScannActivity
+                //No comprueba si la contraseña es correcta y lanza una nueva actividad DevideScannActivity
                 builder.setPositiveButton("OK", (dialog, which) -> {
                     password = input.getText().toString();
                     FuncionesBackend.setPassword(password);

@@ -1,5 +1,7 @@
 package es.uma.smartmeter;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -10,8 +12,16 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
-
+import android.os.StrictMode;
+import android.Manifest;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.tabs.TabLayout;
+
+import es.uma.smartmeter.utils.FuncionesBackend;
+
 
 public class NavigationBar extends AppCompatActivity {
 
@@ -47,6 +57,28 @@ public class NavigationBar extends AppCompatActivity {
 
             }
         });
+
+        //Cosas del main para poder lanzar las actividades
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        this.mPermissionResult.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
+        this.mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+
+        //ESto para qué es?
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null) {
+            System.out.println("Saca las medidas");
+            FuncionesBackend.getRequestMedidas(getApplicationContext());
+            System.out.println("Saca los hogares");
+            FuncionesBackend.getRequestHogares(getApplicationContext());
+            System.out.println("Todo asignado");
+        }
     }
 
     class AdaptadorFragmentos extends FragmentStateAdapter{
@@ -72,4 +104,16 @@ public class NavigationBar extends AppCompatActivity {
             return 3;
         }
     }
+
+    //Métodos que estan en el main (para compronar si se puede acceder a las actividades
+
+    private final ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            result -> {
+                if (result) {
+                    System.out.println("onActivityResult: PERMISSION GRANTED");
+                } else {
+                    System.out.println("onActivityResult: PERMISSION DENIED");
+                }
+            });
 }
