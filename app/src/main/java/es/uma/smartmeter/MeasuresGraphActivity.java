@@ -43,7 +43,7 @@ public class MeasuresGraphActivity extends AppCompatActivity {
             i.putExtra("mes", "TODOS");
             startActivity(i);
         });
-        graphView = findViewById(R.id.graph);
+        graphView = findViewById(R.id.graphView);
         graphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {
