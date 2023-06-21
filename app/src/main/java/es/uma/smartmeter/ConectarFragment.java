@@ -29,30 +29,32 @@ public class ConectarFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.button).setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext(), R.style.MyAlertDialogStyle);
-            builder.setTitle("Contraseña");
-            builder.setMessage("Introduzca la contraseña del WiFi");
-            //Crea un EditText en el nuevo cuadro de diálogo que recibe un texto normal pero oculta los caracteres ingresados
-            final EditText input = new EditText(this.getContext());
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            builder.setView(input);
-
-            //No comprueba si la contraseña es correcta y lanza una nueva actividad DevideScannActivity
-            builder.setPositiveButton("OK", (dialog, which) -> {
-                password = input.getText().toString();
-                FuncionesBackend.setPassword(password);
-                //He cambiado getApplicationContext() por this.getContext()
-                Intent i = new Intent(this.getContext(), DeviceScanActivity.class);
-                startActivity(i);
-            }).setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-            builder.show();
-        });
+        binding.button.setOnClickListener(v -> conect());
+        conect();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void conect(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogStyle);
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_connect, null);
+        builder.setTitle("Contraseña");
+        builder.setMessage("Introduzca la contraseña del WiFi");
+        EditText etContraseña = dialogView.findViewById(R.id.etContraseña);
+        //No comprueba si la contraseña es correcta y lanza una nueva actividad DevideScannActivity
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            password = etContraseña.getText().toString();
+            FuncionesBackend.setPassword(password);
+            //He cambiado getApplicationContext() por this.getContext()
+            Intent i = new Intent(getContext(), DeviceScanActivity.class);
+            startActivity(i);
+        }).setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.setView(dialogView);
+        builder.show();
     }
 }
