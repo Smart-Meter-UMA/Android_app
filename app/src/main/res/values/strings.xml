@@ -16,5 +16,8 @@
     <string name="inicia_sesion">Por favor, inicia sesión.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- NETWORK Related Strings -->
+    <string name="networkResponseSuccessText">Response is: %1$s</string>
+    <string name="networkResponseErrorText">That didn\'t work! ERR: %1$d, Message: %2$s</string>
 
 </resources>
