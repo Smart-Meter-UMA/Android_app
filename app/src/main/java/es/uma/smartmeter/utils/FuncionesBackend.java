@@ -5,7 +5,10 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,10 +22,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 
 public class FuncionesBackend {
 
@@ -88,7 +87,7 @@ public class FuncionesBackend {
 
     public static String postInfo(String nombre, JSONObject hogar) throws IOException, JSONException {
 
-        URL url = new URL("https://api-kproject.herokuapp.com/kproject/dispositivos/");
+        URL url = new URL("http://192.168.100.72:8001/kproject/dispositivos/");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
         conn.setRequestMethod("POST");
@@ -131,7 +130,7 @@ public class FuncionesBackend {
 
     public static void getRequestMedidas(Context context) {
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(context);
-        String url = "https://api-kproject.herokuapp.com/kproject/medidas";
+        String url = "http://192.168.100.72:8001/kproject/medidas";
 
         //This code is executed if the server responds, whether or not the response contains data.
         //Create an error listener to handle errors appropriately.
@@ -151,7 +150,7 @@ public class FuncionesBackend {
 
     public static void getRequestHogares(Context context) {
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(context);
-        String url = "https://api-kproject.herokuapp.com/kproject/hogars";
+        String url = "http://192.168.100.72:8001/kproject/hogars";
 
         //Create an error listener to handle errors appropriately.
         //This code is executed if the server responds, whether or not the response contains data.

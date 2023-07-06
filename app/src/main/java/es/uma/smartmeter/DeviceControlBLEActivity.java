@@ -1,18 +1,17 @@
 package es.uma.smartmeter;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,18 +61,20 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
 
 
         try {
-            JSONArray json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
-            //this.power.setText((String)(json.get(json.length()-1));
-            JSONObject jsonObject;
-            String[] items = new String[json.length()];
-            System.out.println(FuncionesBackend.getGetResponseGetHogares());
-            for (int i = 0; i < json.length(); i++) {
-                jsonObject = ((JSONObject) json.get(0));
-                items[i] = (String) jsonObject.get("nombre");
-            }
+            if (FuncionesBackend.getGetResponseGetHogares() != null) {
+                JSONArray json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
+                //this.power.setText((String)(json.get(json.length()-1));
+                JSONObject jsonObject;
+                String[] items = new String[json.length()];
+                System.out.println(FuncionesBackend.getGetResponseGetHogares());
+                for (int i = 0; i < json.length(); i++) {
+                    jsonObject = ((JSONObject) json.get(0));
+                    items[i] = (String) jsonObject.get("nombre");
+                }
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, items);
-            spinner.setAdapter(adapter);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, items);
+                spinner.setAdapter(adapter);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -85,21 +86,22 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
 
             JSONArray json;
             try {
-                json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
-                int index = spinner.getSelectedItemPosition();
-                JSONObject object = (JSONObject) json.get(index);
-                FuncionesBackend.postInfo(tName.getText().toString(), object);
-                Toast.makeText(getApplicationContext(), "Smart meter configurado", Toast.LENGTH_SHORT).show();
+                if (FuncionesBackend.getGetResponseGetHogares() != null) {
+                    json = new JSONArray(FuncionesBackend.getGetResponseGetHogares());
+                    int index = spinner.getSelectedItemPosition();
+                    JSONObject object = (JSONObject) json.get(index);
+                    FuncionesBackend.postInfo(tName.getText().toString(), object);
+                    Toast.makeText(getApplicationContext(), "Smart meter configurado", Toast.LENGTH_SHORT).show();
 
-                while (FuncionesBackend.getTokenDispositivo() == null) {
-                    System.out.println("Espera activa al token");
+                    while (FuncionesBackend.getTokenDispositivo() == null) {
+                        System.out.println("Espera activa al token");
+                    }
+                    Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
+                    bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+
+                    //Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    //startActivity(i);
                 }
-                Intent gattServiceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
-                bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
-                //Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                //startActivity(i);
-
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
