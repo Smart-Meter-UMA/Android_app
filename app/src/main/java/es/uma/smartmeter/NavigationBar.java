@@ -1,19 +1,19 @@
 package es.uma.smartmeter;
 
+import android.Manifest;
+import android.os.Bundle;
+import android.os.StrictMode;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Bundle;
-import android.os.StrictMode;
-import android.Manifest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,13 +27,14 @@ public class NavigationBar extends AppCompatActivity {
 
     private TabLayout tbNavigationBar;
     private ViewPager2 viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_bar);
         tbNavigationBar = findViewById(R.id.tbNavigationBar);
         viewPager = findViewById(R.id.viewPager);
-        viewPager.setAdapter(new AdaptadorFragmentos(getSupportFragmentManager(),getLifecycle()));
+        viewPager.setAdapter(new AdaptadorFragmentos(getSupportFragmentManager(), getLifecycle()));
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -81,7 +82,7 @@ public class NavigationBar extends AppCompatActivity {
         }
     }
 
-    class AdaptadorFragmentos extends FragmentStateAdapter{
+    class AdaptadorFragmentos extends FragmentStateAdapter {
 
         public AdaptadorFragmentos(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
             super(fragmentManager, lifecycle);
@@ -90,9 +91,9 @@ public class NavigationBar extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            if(position == 0){
+            if (position == 0) {
                 return new MedicionFragment();
-            } else if (position == 1){
+            } else if (position == 1) {
                 return new GraficasFragment();
             } else {
                 return new ConectarFragment();

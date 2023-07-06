@@ -1,14 +1,11 @@
 package es.uma.smartmeter;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import es.uma.smartmeter.databinding.FragmentMedicionBinding;
 import es.uma.smartmeter.databinding.ActivityMeasureBinding;
 import es.uma.smartmeter.utils.FuncionesBackend;
 
@@ -64,7 +60,7 @@ public class MedicionFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView(){
+    public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }

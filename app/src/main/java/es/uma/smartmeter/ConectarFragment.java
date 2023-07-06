@@ -1,19 +1,15 @@
 package es.uma.smartmeter;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
 
 import es.uma.smartmeter.databinding.FragmentConectarBinding;
 import es.uma.smartmeter.utils.FuncionesBackend;
@@ -23,6 +19,7 @@ public class ConectarFragment extends Fragment {
     private FragmentConectarBinding binding;
 
     private String password;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentConectarBinding.inflate(inflater, container, false);
@@ -52,7 +49,7 @@ public class ConectarFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView(){
+    public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }

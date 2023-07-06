@@ -10,11 +10,12 @@ public class Medicion {
     private Date fecha;
     private final String fechaString;
 
-    public Medicion(double intensidad, double voltaje){
-        this.fechaString=new SimpleDateFormat("MM/DD/YY HH:MM:SS").format(this.fecha);
+    public Medicion(double intensidad, double voltaje) {
+        this.fechaString = new SimpleDateFormat("MM/DD/YY HH:MM:SS").format(this.fecha);
     }
-    public Medicion(double potencia, String fecha){
-        this.potencia=potencia;
-        this.fechaString=fecha;
+
+    public Medicion(double potencia, String fecha) {
+        this.potencia = potencia;
+        this.fechaString = fecha;
     }
 }

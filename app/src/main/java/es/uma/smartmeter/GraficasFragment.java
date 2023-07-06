@@ -2,13 +2,11 @@ package es.uma.smartmeter;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -26,7 +24,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import es.uma.smartmeter.databinding.FragmentGraficasBinding;
 import es.uma.smartmeter.databinding.ActivityMeasuresGraphBinding;
 import es.uma.smartmeter.utils.FuncionesBackend;
 
@@ -71,7 +68,7 @@ public class GraficasFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView(){
+    public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
