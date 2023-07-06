@@ -41,15 +41,28 @@ import java.util.List;
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
 public class DeviceScanActivity extends ListActivity {
-    private LeDeviceListAdapter mLeDeviceListAdapter;
-    private BluetoothAdapter mBluetoothAdapter;
-    private boolean mScanning;
-    private Handler mHandler;
-    private final Toast toast = null;
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
+    private final Toast toast = null;
+    private LeDeviceListAdapter mLeDeviceListAdapter;
+    // Device scan callback.
+    private final BluetoothAdapter.LeScanCallback mLeScanCallback =
+            new BluetoothAdapter.LeScanCallback() {
 
+                @Override
+                public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+                    System.out.println("Llega aqui");
+
+                    runOnUiThread(() -> {
+                        System.out.println("El device es" + device.getName());
+                        mLeDeviceListAdapter.addDevice(device);
+                    });
+                }
+            };
+    private BluetoothAdapter mBluetoothAdapter;
+    private boolean mScanning;
+    private Handler mHandler;
 
     public void hideToast() {
         if (this.toast != null)
@@ -184,6 +197,10 @@ public class DeviceScanActivity extends ListActivity {
         return mBluetoothAdapter;
     }
 
+    static class ViewHolder {
+        TextView deviceName;
+        TextView deviceAddress;
+    }
 
     // Adapter for holding devices found through scanning.
     private class LeDeviceListAdapter {
@@ -209,25 +226,5 @@ public class DeviceScanActivity extends ListActivity {
         public void clear() {
             mLeDevices.clear();
         }
-    }
-
-    // Device scan callback.
-    private final BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
-
-                @Override
-                public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-                    System.out.println("Llega aqui");
-
-                    runOnUiThread(() -> {
-                        System.out.println("El device es" + device.getName());
-                        mLeDeviceListAdapter.addDevice(device);
-                    });
-                }
-            };
-
-    static class ViewHolder {
-        TextView deviceName;
-        TextView deviceAddress;
     }
 }

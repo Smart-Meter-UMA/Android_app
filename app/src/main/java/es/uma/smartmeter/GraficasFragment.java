@@ -12,7 +12,6 @@ import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,8 +25,10 @@ import java.util.List;
 
 import es.uma.smartmeter.databinding.ActivityMeasuresGraphBinding;
 import es.uma.smartmeter.utils.FuncionesBackend;
+import es.uma.smartmeter.utils.NetworkManager;
 
 public class GraficasFragment extends Fragment {
+    public static final String TAG = "SmartMeter-Graficas";
     private ActivityMeasuresGraphBinding binding;
 
     @Override
@@ -56,15 +57,17 @@ public class GraficasFragment extends Fragment {
         });
         binding.graphView.getGridLabelRenderer().setTextSize(28);
 
-        try {
-            addData();
-        } catch (JSONException | ParseException | NullPointerException e) {
-            e.printStackTrace();
-        }
-
+        addData();
 
         binding.graphView.setTitle(" \n Lista de mediciones históricas para " + FuncionesBackend.getEmailGoogle());
         binding.graphView.setTitleTextSize(28);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        NetworkManager.getInstance(getContext()).cancelAllRequests(TAG);
     }
 
     @Override
@@ -73,40 +76,43 @@ public class GraficasFragment extends Fragment {
         binding = null;
     }
 
-    private void addData() throws JSONException, ParseException {
+    private void addData() {
+        NetworkManager.getInstance(getContext()).newMeasurementsRequest(response -> {
+            try {
+                System.out.println("Medidas: " + response.toString());
+                DataPoint[] array = new DataPoint[5];
+                int j = 0;
+                for (int i = response.length() - 1; i > response.length() - 6; i--) {
+                    JSONObject jsonObject = ((JSONObject) response.get(i));
+                    double d = jsonObject.getDouble("kw");
 
-        JSONArray json = new JSONArray(FuncionesBackend.getResponseGetMedidas());
-        System.out.println("Medidas: " + FuncionesBackend.getResponseGetMedidas());
-        DataPoint[] array = new DataPoint[5];
-        int j = 0;
-        for (int i = json.length() - 1; i > json.length() - 6; i--) {
-            JSONObject jsonObject = ((JSONObject) json.get(i));
-            double d = jsonObject.getDouble("kw");
+                    SimpleDateFormat dfISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                    SimpleDateFormat dfTxt = new SimpleDateFormat("dd/MM/yyyy");
+                    Date date = dfISO.parse(jsonObject.get("fecha").toString());
+                    System.out.println(date.getTime());
 
-            SimpleDateFormat dfISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            SimpleDateFormat dfTxt = new SimpleDateFormat("dd/MM/yyyy");
-            Date date = dfISO.parse(jsonObject.get("fecha").toString());
-            System.out.println(date.getTime());
+                    Date dateFinal = new Date(date.getTime());
+                    System.out.println(dateFinal);
+                    System.out.println("Los valores son " + dateFinal + " : " + d);
+                    DataPoint dt = new DataPoint(dateFinal, d);
+                    array[j] = dt;
+                    j++;
+                }
 
-            Date dateFinal = new Date(date.getTime());
-            System.out.println(dateFinal);
-            System.out.println("Los valores son " + dateFinal + " : " + d);
-            DataPoint dt = new DataPoint(dateFinal, d);
-            array[j] = dt;
-            j++;
-        }
-
-        showArray(array);
-        List<DataPoint> list = Arrays.asList(array);
-        System.out.println(list);
-        Collections.reverse(list);
-        System.out.println(list);
-        array = list.toArray(array);
-        System.out.println("Length" + array.length);
-        showArray(array);
-        LineGraphSeries<DataPoint> points = new LineGraphSeries<>(array);
-        binding.graphView.addSeries(points);
-
+                showArray(array);
+                List<DataPoint> list = Arrays.asList(array);
+                System.out.println(list);
+                Collections.reverse(list);
+                System.out.println(list);
+                array = list.toArray(array);
+                System.out.println("Length" + array.length);
+                showArray(array);
+                LineGraphSeries<DataPoint> points = new LineGraphSeries<>(array);
+                binding.graphView.addSeries(points);
+            } catch (JSONException | ParseException e) {
+                e.printStackTrace();
+            }
+        }, TAG);
     }
 
     private void showArray(DataPoint[] array) {
@@ -116,5 +122,4 @@ public class GraficasFragment extends Fragment {
             System.out.println("DataPointY: " + array[i].getY());
         }
     }
-
 }

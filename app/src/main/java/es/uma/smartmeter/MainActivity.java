@@ -1,6 +1,5 @@
 package es.uma.smartmeter;
 
-
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,9 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private final String INICIA_SESION = "Por favor, inicia sesión.";
     private final String EXTRAYENDO_MEDICIONES = "Extrayendo mediciones, espere unos segundos.";
     private final String EXTRAYENDO_HOGARES = "Extrayendo hogares, espere unos segundos.";
-
-    private String password;
-
     /*
     ActivityResultLauncher <String> (espera un String como resultado) proporciona un mecanismo para definir como se maneja el resultado de una actividad.
     Para registrar el objeto ActivityResultLauncher se utiliza el método registerForActivityResult(ActivityResultContract, ActivityResultCallback<T>):
@@ -51,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("onActivityResult: PERMISSION DENIED");
                 }
             });
+    private String password;
 
     /*
     El método onCreate() inicializa la actividad cuando esta es creada.
@@ -79,10 +76,6 @@ public class MainActivity extends AppCompatActivity {
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
-            System.out.println("Saca las medidas");
-            FuncionesBackend.getRequestMedidas(getApplicationContext());
-            System.out.println("Saca los hogares");
-            FuncionesBackend.getRequestHogares(getApplicationContext());
             System.out.println("Todo asignado");
         }
 
@@ -102,9 +95,6 @@ public class MainActivity extends AppCompatActivity {
         bTest.setOnClickListener(view -> {
             System.out.println("El token es " + FuncionesBackend.getTokenGoogle());
             System.out.println("El wifi es " + FuncionesBackend.getWifi(getApplicationContext()));
-
-            FuncionesBackend.getRequestMedidas(MainActivity.this);
-            System.out.println("La response es " + FuncionesBackend.getResponseGetMedidas());
         });
 
 
@@ -116,13 +106,7 @@ public class MainActivity extends AppCompatActivity {
         bConnect.setOnClickListener(view -> {
             if (account == null)
                 Toast.makeText(getApplicationContext(), INICIA_SESION, Toast.LENGTH_SHORT).show();
-            else if (FuncionesBackend.getResponseGetMedidas() == null) {
-                Toast.makeText(getApplicationContext(), EXTRAYENDO_MEDICIONES, Toast.LENGTH_SHORT).show();
-                FuncionesBackend.getRequestHogares(getApplicationContext());
-            } else if (FuncionesBackend.getGetResponseGetHogares() == null) {
-                FuncionesBackend.getRequestHogares(getApplicationContext());
-                Toast.makeText(getApplicationContext(), EXTRAYENDO_HOGARES, Toast.LENGTH_SHORT).show();
-            } else {
+            else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
                 builder.setTitle("Contraseña");
                 builder.setMessage("Introduzca la contraseña del WiFi");
@@ -142,9 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
                 builder.show();
-
             }
-
         });
 
         /*
@@ -156,13 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (account == null)
                 Toast.makeText(getApplicationContext(), INICIA_SESION, Toast.LENGTH_SHORT).show();
-            else if (FuncionesBackend.getResponseGetMedidas() == null) {
-                Toast.makeText(getApplicationContext(), EXTRAYENDO_MEDICIONES, Toast.LENGTH_SHORT).show();
-                FuncionesBackend.getRequestMedidas(getApplicationContext());
-            } else if (FuncionesBackend.getGetResponseGetHogares() == null) {
-                FuncionesBackend.getRequestHogares(getApplicationContext());
-                Toast.makeText(getApplicationContext(), EXTRAYENDO_HOGARES, Toast.LENGTH_SHORT).show();
-            } else {
+            else {
                 Intent i = new Intent(getApplicationContext(), MeasuresGraphActivity.class);
                 startActivity(i);
             }
@@ -177,16 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (account == null)
                 Toast.makeText(getApplicationContext(), INICIA_SESION, Toast.LENGTH_SHORT).show();
-            else if (FuncionesBackend.getResponseGetMedidas() == null) {
-                Toast.makeText(getApplicationContext(), EXTRAYENDO_MEDICIONES, Toast.LENGTH_SHORT).show();
-                FuncionesBackend.getRequestHogares(getApplicationContext());
-                System.out.println("Medidas" + FuncionesBackend.getResponseGetMedidas());
-            } else if (FuncionesBackend.getGetResponseGetHogares() == null) {
-                FuncionesBackend.getRequestHogares(getApplicationContext());
-                System.out.println("Hogares: " + FuncionesBackend.getGetResponseGetHogares());
-                Toast.makeText(getApplicationContext(), EXTRAYENDO_HOGARES, Toast.LENGTH_SHORT).show();
-            } else {
-
+            else {
                 Intent i = new Intent(getApplicationContext(), MeasureActivity.class);
                 startActivity(i);
             }
@@ -197,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         bLogin.setOnClickListener(view -> {
             Intent i = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(i);
-
         });
 
     }

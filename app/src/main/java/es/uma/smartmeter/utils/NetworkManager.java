@@ -1,7 +1,6 @@
 package es.uma.smartmeter.utils;
 
 import android.content.Context;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -10,9 +9,12 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,8 +26,8 @@ import es.uma.smartmeter.R;
 
 public class NetworkManager {
     private static NetworkManager instance;
-    private RequestQueue requestQueue;
     private final Context ctx;
+    private RequestQueue requestQueue;
 
     private NetworkManager(Context context) {
         // getApplicationContext() es clave, evita que se filtre la
@@ -56,82 +58,63 @@ public class NetworkManager {
         getRequestQueue().cancelAll(tag);
     }
 
-    public void newLoginRequest(TextView output, Object tag) {
+    public void newLoginRequest(Response.Listener<JSONObject> listener, Object tag) {
         String url = getURL("login/");
 
         // Solicita una respuesta json desde la URL proporcionada.
-        JsonRequest request = new JsonRequest(Request.Method.POST, url, tag, null,
-                response -> {
-                    // Muestra la respuesta.
-                    output.setText(ctx.getString(R.string.networkResponseSuccessText, response.toString()));
-                },
-                error -> Toast.makeText(ctx, ctx.getString(R.string.networkResponseErrorText, error.networkResponse != null ? error.networkResponse.statusCode : -1, error.getMessage()), Toast.LENGTH_LONG).show());
+        JSONObjectRequest request = new JSONObjectRequest(url, tag, null, listener, this::showError);
         // Añade la petición al RequestQueue.
         addToRequestQueue(request);
     }
 
-    public void newMeasurementsRequest(TextView output, Object tag) {
+    public void newMeasurementsRequest(Response.Listener<JSONArray> listener, Object tag) {
         String url = getURL("medidas/");
 
         // Solicita una respuesta json desde la URL proporcionada.
-        JsonRequest request = new JsonRequest(Request.Method.GET, url, tag, null,
-                response -> {
-                    // Muestra la respuesta.
-                    output.setText(ctx.getString(R.string.networkResponseSuccessText, response.toString()));
-                },
-                error -> Toast.makeText(ctx, ctx.getString(R.string.networkResponseErrorText, error.networkResponse != null ? error.networkResponse.statusCode : -1, error.getMessage()), Toast.LENGTH_LONG).show());
+        JSONArrayRequest request = new JSONArrayRequest(url, tag, listener, this::showError);
         // Añade la petición al RequestQueue.
         addToRequestQueue(request);
     }
 
-    public void newHomesRequest(TextView output, Object tag) {
+    public void newHomesRequest(Response.Listener<JSONArray> listener, Object tag) {
         String url = getURL("hogars/");
 
         // Solicita una respuesta json desde la URL proporcionada.
-        JsonRequest request = new JsonRequest(Request.Method.GET, url, tag, null,
-                response -> {
-                    // Muestra la respuesta.
-                    output.setText(ctx.getString(R.string.networkResponseSuccessText, response.toString()));
-                },
-                error -> Toast.makeText(ctx, ctx.getString(R.string.networkResponseErrorText, error.networkResponse != null ? error.networkResponse.statusCode : -1, error.getMessage()), Toast.LENGTH_LONG).show());
+        JSONArrayRequest request = new JSONArrayRequest(url, tag, listener, this::showError);
         // Añade la petición al RequestQueue.
         addToRequestQueue(request);
     }
 
-    public void newRegisterDeviceRequest(String name, JSONObject home, TextView output, Object tag) {
+    public void newRegisterDeviceRequest(String name, JSONObject home, Response.Listener<JSONObject> listener, Object tag) throws JSONException {
         String url = getURL("dispositivos/");
 
-        JSONObject jsonRequest = new JSONObject();
-        try {
-            jsonRequest.put("nombre", name);
-            jsonRequest.put("hogar", home);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+        JSONObject body = new JSONObject();
+        body.put("nombre", name);
+        body.put("hogar", home);
 
         // Solicita una respuesta json desde la URL proporcionada.
-        JsonRequest request = new JsonRequest(Request.Method.POST, url, tag, jsonRequest,
-                response -> {
-                    // Muestra la respuesta.
-                    try {
-                        output.setText(ctx.getString(R.string.networkResponseSuccessText, response.getString("token")));
-                    } catch (JSONException e) {
-                        output.setText(ctx.getString(R.string.networkResponseSuccessText, response.toString()));
-                    }
-                },
-                error -> Toast.makeText(ctx, ctx.getString(R.string.networkResponseErrorText, error.networkResponse != null ? error.networkResponse.statusCode : -1, error.getMessage()), Toast.LENGTH_LONG).show());
+        JSONObjectRequest request = new JSONObjectRequest(url, tag, body, listener, this::showError);
         // Añade la petición al RequestQueue.
         addToRequestQueue(request);
     }
 
-    public String getURL(String suffix) {
+    private String getURL(String suffix) {
         return ctx.getString(R.string.backend_url).concat(suffix);
     }
 
-    public static class JsonRequest extends JsonObjectRequest {
+    private String getToken() {
+        return GoogleLoginManager.getInstance(ctx).getToken();
+    }
 
-        public JsonRequest(int method, String url, @Nullable Object tag, @Nullable JSONObject jsonRequest, Response.Listener<JSONObject> listener, @Nullable Response.ErrorListener errorListener) {
-            super(method, url, jsonRequest, listener, errorListener);
+    private void showError(VolleyError error) {
+        Toast.makeText(ctx, ctx.getString(R.string.networkResponseErrorText, error.networkResponse != null ? error.networkResponse.statusCode : -1, error.getMessage()), Toast.LENGTH_LONG).show();
+    }
+
+    class JSONArrayRequest extends JsonArrayRequest {
+
+        JSONArrayRequest(String url, @Nullable Object tag, Response.Listener<JSONArray> listener, @Nullable Response.ErrorListener errorListener) {
+            super(Method.GET, url, null, listener, errorListener);
+
             if (tag != null) setTag(tag);
         }
 
@@ -141,9 +124,28 @@ public class NetworkManager {
             if (headers == null || headers.equals(Collections.emptyMap())) {
                 headers = new HashMap<>();
             }
-            headers.put("Content-Type", "application/json;charset=UTF-8");
-            headers.put("Accept", "application/json");
-            headers.put("Authorization", ""/* getToken() */);
+            headers.put("Content-Type", "application/json");
+            headers.put("Authorization", getToken());
+            return headers;
+        }
+    }
+
+    class JSONObjectRequest extends JsonObjectRequest {
+
+        JSONObjectRequest(String url, @Nullable Object tag, @Nullable JSONObject jsonRequest, Response.Listener<JSONObject> listener, @Nullable Response.ErrorListener errorListener) {
+            super(Method.POST, url, jsonRequest, listener, errorListener);
+
+            if (tag != null) setTag(tag);
+        }
+
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            Map<String, String> headers = super.getHeaders();
+            if (headers == null || headers.equals(Collections.emptyMap())) {
+                headers = new HashMap<>();
+            }
+            headers.put("Content-Type", "application/json");
+            headers.put("Authorization", getToken());
             return headers;
         }
     }

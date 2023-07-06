@@ -15,17 +15,14 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication.NoActionBar"
         tools:targetApi="31">
 
-        <activity
-            android:name=".MedicionesDatosActivity"
-            android:exported="false" />
         <activity
             android:name=".TimerActivity"
             android:exported="true">
@@ -35,6 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MedicionesDatosActivity"
+            android:exported="false" />
         <activity
             android:name=".DeviceControlBLEActivity"
             android:exported="false" />
@@ -56,9 +56,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-
-        <activity android:name=".NavigationBar"
-            android:exported="false"/>
+        <activity
+            android:name=".NavigationBar"
+            android:exported="false" />
 
         <service
             android:name=".BluetoothLeService"

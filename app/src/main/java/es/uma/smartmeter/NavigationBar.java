@@ -20,11 +20,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.tabs.TabLayout;
 
-import es.uma.smartmeter.utils.FuncionesBackend;
-
 
 public class NavigationBar extends AppCompatActivity {
 
+    private final ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            result -> {
+                if (result) {
+                    System.out.println("onActivityResult: PERMISSION GRANTED");
+                } else {
+                    System.out.println("onActivityResult: PERMISSION DENIED");
+                }
+            });
     private TabLayout tbNavigationBar;
     private ViewPager2 viewPager;
 
@@ -74,13 +81,11 @@ public class NavigationBar extends AppCompatActivity {
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
-            System.out.println("Saca las medidas");
-            FuncionesBackend.getRequestMedidas(getApplicationContext());
-            System.out.println("Saca los hogares");
-            FuncionesBackend.getRequestHogares(getApplicationContext());
             System.out.println("Todo asignado");
         }
     }
+
+    //Métodos que estan en el main (para compronar si se puede acceder a las actividades
 
     class AdaptadorFragmentos extends FragmentStateAdapter {
 
@@ -105,16 +110,4 @@ public class NavigationBar extends AppCompatActivity {
             return 3;
         }
     }
-
-    //Métodos que estan en el main (para compronar si se puede acceder a las actividades
-
-    private final ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(),
-            result -> {
-                if (result) {
-                    System.out.println("onActivityResult: PERMISSION GRANTED");
-                } else {
-                    System.out.println("onActivityResult: PERMISSION DENIED");
-                }
-            });
 }

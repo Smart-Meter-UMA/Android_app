@@ -20,9 +20,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import es.uma.smartmeter.utils.FuncionesBackend;
+import es.uma.smartmeter.utils.NetworkManager;
 
 public class MedicionesDatosActivity extends AppCompatActivity {
+    public static final String TAG = "SmartMeter-MedicionesDatos";
 
     private TextView tMaximo;
     private TextView tMinimo;
@@ -91,7 +92,13 @@ public class MedicionesDatosActivity extends AppCompatActivity {
         this.bFiltrar = findViewById(R.id.bFiltrar);
         this.spMeses = findViewById(R.id.spMeses);
 
-        String medidas = FuncionesBackend.getResponseGetMedidas();
+        bFiltrar.setOnClickListener(view -> {
+            Intent i = new Intent(getApplicationContext(), MedicionesDatosActivity.class);
+            i.putExtra("mes", spMeses.getSelectedItem().toString());
+            startActivity(i);
+            finish();
+        });
+
         String[] items = new String[]{
                 "TODOS",
                 "ENERO",
@@ -111,33 +118,31 @@ public class MedicionesDatosActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, items);
         spMeses.setAdapter(adapter);
 
-        try {
-            JSONArray json = new JSONArray(medidas);
+        NetworkManager.getInstance(this).newMeasurementsRequest(response -> {
+            try {
+                if (!mes.equals("TODOS")) {
+                    System.out.println("Filtramos");
+                    response = filtraMes(response);
+                }
+                String maximo = calculaMax(response);
+                String minimo = calculaMin(response);
+                String media = calculaMedia(response);
 
-            if (!mes.equals("TODOS")) {
-                System.out.println("Filtramos");
-                json = filtraMes(json);
+                this.tMedia.setText(media);
+                this.tMinimo.setText(minimo);
+                this.tMaximo.setText(maximo);
+
+            } catch (JSONException | ParseException e) {
+                e.printStackTrace();
             }
-            String maximo = calculaMax(json);
-            String minimo = calculaMin(json);
-            String media = calculaMedia(json);
+        }, TAG);
+    }
 
-            this.tMedia.setText(media);
-            this.tMinimo.setText(minimo);
-            this.tMaximo.setText(maximo);
+    @Override
+    protected void onStop() {
+        super.onStop();
 
-            bFiltrar.setOnClickListener(view -> {
-                Intent i = new Intent(getApplicationContext(), MedicionesDatosActivity.class);
-                i.putExtra("mes", spMeses.getSelectedItem().toString());
-                startActivity(i);
-                finish();
-            });
-
-        } catch (JSONException | ParseException | NullPointerException e) {
-            e.printStackTrace();
-        }
-
-
+        NetworkManager.getInstance(this).cancelAllRequests(TAG);
     }
 
     private JSONArray filtraMes(JSONArray json) throws JSONException, ParseException {
