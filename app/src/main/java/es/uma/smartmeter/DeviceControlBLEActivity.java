@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import es.uma.smartmeter.utils.FuncionesBackend;
 import es.uma.smartmeter.utils.NetworkManager;
 
 public class DeviceControlBLEActivity extends AppCompatActivity {
@@ -24,13 +25,11 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String TAG = "SmartMeter-DeviceControlBLE";
 
-
     private String mDeviceName;
     private String mDeviceAddress;
 
     private TextView tName;
     private TextView tAddress;
-
 
     private BluetoothLeService mBluetoothLeService;
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -52,7 +51,6 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName componentName) {
             mBluetoothLeService = null;
         }
-
     };
     private Button bSendaData;
     private Spinner spinner;
@@ -91,24 +89,25 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
         }, TAG);
 
         bSendaData = findViewById(R.id.bSendData);
-        bSendaData.setOnClickListener(view -> {
-            NetworkManager.getInstance(getApplicationContext()).newHomesRequest(response -> {
-                try {
-                    int index = spinner.getSelectedItemPosition();
-                    JSONObject object = (JSONObject) response.get(index);
-                    NetworkManager.getInstance(this).newRegisterDeviceRequest(tName.getText().toString(), object, res -> {
+        bSendaData.setOnClickListener(view -> NetworkManager.getInstance(getApplicationContext()).newHomesRequest(response -> {
+            try {
+                int index = spinner.getSelectedItemPosition();
+                JSONObject object = (JSONObject) response.get(index);
+                NetworkManager.getInstance(this).newRegisterDeviceRequest(tName.getText().toString(), object, res -> {
+                    try {
+                        FuncionesBackend.setTokenDispositivo(res.getString("token"));
                         Toast.makeText(getApplicationContext(), "Smart meter configurado", Toast.LENGTH_SHORT).show();
 
                         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
                         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-                    }, TAG);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }, TAG);
-        });
-
-
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, TAG);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, TAG));
     }
 
     @Override
