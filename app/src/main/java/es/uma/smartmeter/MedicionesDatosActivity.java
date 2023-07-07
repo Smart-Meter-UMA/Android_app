@@ -82,7 +82,6 @@ public class MedicionesDatosActivity extends AppCompatActivity {
                 break;
         }
 
-
         /*
         Asigna a cada textView su vista, además de al botón Filtrar y el Spinner de los Meses
          */
@@ -131,7 +130,6 @@ public class MedicionesDatosActivity extends AppCompatActivity {
                 this.tMedia.setText(media);
                 this.tMinimo.setText(minimo);
                 this.tMaximo.setText(maximo);
-
             } catch (JSONException | ParseException e) {
                 e.printStackTrace();
             }
@@ -146,7 +144,6 @@ public class MedicionesDatosActivity extends AppCompatActivity {
     }
 
     private JSONArray filtraMes(JSONArray json) throws JSONException, ParseException {
-
         JSONArray res = new JSONArray();
         List<Integer> indices = new ArrayList<>();
         System.out.println("Tu json es " + json.toString());
@@ -172,12 +169,10 @@ public class MedicionesDatosActivity extends AppCompatActivity {
         return res;
     }
 
-
     /*
     Métodos para calcular la media el máximo y el mínimo.
      */
     private String calculaMedia(JSONArray json) throws JSONException {
-
         String media;
 
         double suma = 0;
@@ -193,7 +188,6 @@ public class MedicionesDatosActivity extends AppCompatActivity {
         }
 
         return media;
-
     }
 
     private String calculaMin(JSONArray json) throws JSONException {
@@ -226,6 +220,5 @@ public class MedicionesDatosActivity extends AppCompatActivity {
             maximo = max + " kw";
         }
         return maximo;
-
     }
 }

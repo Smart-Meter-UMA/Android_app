@@ -40,6 +40,7 @@ import java.util.List;
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
+// TODO: Cambiar la ListActivity por RecyclerView o algo más eficiente.
 public class DeviceScanActivity extends ListActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
@@ -49,7 +50,6 @@ public class DeviceScanActivity extends ListActivity {
     // Device scan callback.
     private final BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
-
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
                     System.out.println("Llega aqui");
@@ -86,8 +86,7 @@ public class DeviceScanActivity extends ListActivity {
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         // Checks if Bluetooth is supported on the device.
@@ -167,10 +166,7 @@ public class DeviceScanActivity extends ListActivity {
                 System.out.println("BLE// onScanFailed");
                 Log.e("Scan Failed", "Error Code: " + errorCode);
             }
-
-
         };
-
 
         if (enable) {
             // Stops scanning after a pre-defined scan period.
@@ -181,11 +177,9 @@ public class DeviceScanActivity extends ListActivity {
                 invalidateOptionsMenu();
             }, SCAN_PERIOD);
 
-
             mScanning = true;
             mBluetoothAdapter.getBluetoothLeScanner().startScan(scanCallback);
             System.out.println("Llega al scan");
-
         } else {
             mScanning = false;
             mBluetoothAdapter.getBluetoothLeScanner().stopScan(scanCallback);

@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import es.uma.smartmeter.databinding.FragmentConectarBinding;
 import es.uma.smartmeter.utils.FuncionesBackend;
 
-
 public class ConectarFragment extends Fragment {
     private FragmentConectarBinding binding;
 
