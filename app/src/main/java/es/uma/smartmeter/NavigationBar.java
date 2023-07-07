@@ -14,12 +14,10 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.tabs.TabLayout;
 
+import es.uma.smartmeter.utils.GoogleLoginManager;
 
 public class NavigationBar extends AppCompatActivity {
 
@@ -73,13 +71,7 @@ public class NavigationBar extends AppCompatActivity {
         this.mPermissionResult.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
         this.mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
 
-        //ESto para qué es?
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        GoogleSignInAccount account = GoogleLoginManager.getInstance(getApplicationContext()).getAccount();
         if (account != null) {
             System.out.println("Todo asignado");
         }

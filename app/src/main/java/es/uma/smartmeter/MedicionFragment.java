@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import org.json.JSONException;
@@ -16,7 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import es.uma.smartmeter.databinding.ActivityMeasureBinding;
-import es.uma.smartmeter.utils.FuncionesBackend;
+import es.uma.smartmeter.utils.GoogleLoginManager;
 import es.uma.smartmeter.utils.NetworkManager;
 
 public class MedicionFragment extends Fragment {
@@ -24,13 +25,13 @@ public class MedicionFragment extends Fragment {
     private ActivityMeasureBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = ActivityMeasureBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         NetworkManager.getInstance(getContext()).newMeasurementsRequest(response -> {
@@ -53,13 +54,12 @@ public class MedicionFragment extends Fragment {
                 cal.setTime(date);
 
                 binding.tFecha.setText(dfTxt.format(date));
-
             } catch (JSONException | ParseException e) {
                 e.printStackTrace();
             }
         }, TAG);
 
-        binding.tCorreo.setText(binding.tCorreo.getText().toString().replace("CORREO", FuncionesBackend.getEmailGoogle()));
+        binding.tCorreo.setText(binding.tCorreo.getText().toString().replace("CORREO", GoogleLoginManager.getInstance(getContext()).getEmail()));
     }
 
     @Override
@@ -74,5 +74,4 @@ public class MedicionFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

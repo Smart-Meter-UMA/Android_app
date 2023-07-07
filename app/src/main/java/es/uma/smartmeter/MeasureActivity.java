@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import es.uma.smartmeter.utils.FuncionesBackend;
+import es.uma.smartmeter.utils.GoogleLoginManager;
 import es.uma.smartmeter.utils.NetworkManager;
 
 public class MeasureActivity extends AppCompatActivity {
@@ -31,7 +31,6 @@ public class MeasureActivity extends AppCompatActivity {
         this.correo = findViewById(R.id.tCorreo);
         this.fecha = findViewById(R.id.tFecha);
         this.power = findViewById(R.id.tPower);
-
 
         NetworkManager.getInstance(this).newMeasurementsRequest(response -> {
             System.out.println("La response es " + response.toString());
@@ -52,15 +51,12 @@ public class MeasureActivity extends AppCompatActivity {
                 cal.setTime(date);
 
                 this.fecha.setText(dfTxt.format(date));
-
             } catch (JSONException | ParseException | NullPointerException e) {
                 e.printStackTrace();
             }
         }, TAG);
 
-        this.correo.setText(this.correo.getText().toString().replace("CORREO", FuncionesBackend.getEmailGoogle()));
-
-
+        this.correo.setText(this.correo.getText().toString().replace("CORREO", GoogleLoginManager.getInstance(getApplicationContext()).getEmail()));
     }
 
     @Override

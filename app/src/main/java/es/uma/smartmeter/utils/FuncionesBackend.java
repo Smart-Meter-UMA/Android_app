@@ -5,8 +5,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
 public class FuncionesBackend {
-    private static String tokenGoogle;
-    private static String emailGoogle;
     private static String password;
     private static String tokenDispositivo = null;
 
@@ -16,22 +14,6 @@ public class FuncionesBackend {
 
     public static void setTokenDispositivo(String tokenDispositivo) {
         FuncionesBackend.tokenDispositivo = tokenDispositivo;
-    }
-
-    public static String getTokenGoogle() {
-        return tokenGoogle;
-    }
-
-    public static void setTokenGoogle(String tokenGoogle) {
-        FuncionesBackend.tokenGoogle = tokenGoogle;
-    }
-
-    public static String getEmailGoogle() {
-        return emailGoogle;
-    }
-
-    public static void setEmailGoogle(String emailGoogle) {
-        FuncionesBackend.emailGoogle = emailGoogle;
     }
 
     public static String getWifi(Context context) {

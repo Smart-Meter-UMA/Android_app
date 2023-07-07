@@ -12,22 +12,18 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import es.uma.smartmeter.utils.FuncionesBackend;
+import es.uma.smartmeter.utils.GoogleLoginManager;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     // La forma de obtener el token es con account.getToken(), ya es cuestión de mandarlo donde sea.
     private SignInButton signInButton;
     private Button signoutButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,28 +45,24 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         this.signInButton = findViewById(R.id.sign_in_button);
         this.signoutButton = findViewById(R.id.bSignOut);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        GoogleSignInAccount account = GoogleLoginManager.getInstance(this).getAccount();
         if (account != null) {
             System.out.println("La acccount es " + account.getEmail());
             System.out.println("EL token es " + account.getIdToken());
             //Una vez tienes eso puedes hacer la post junto al nombre y al hogar.
-
         } else {
             System.out.println("Account nula");
         }
         updateUI(account);
 
-
         this.signInButton.setOnClickListener(view -> {
-            Intent i = mGoogleSignInClient.getSignInIntent();
+            Intent i = GoogleLoginManager.getInstance(this).getClient().getSignInIntent();
             someActivityResultLauncher.launch(i);
             updateUI(account);
         });
 
         this.signoutButton.setOnClickListener(view -> {
-            mGoogleSignInClient.signOut();
+            GoogleLoginManager.getInstance(this).getClient().signOut();
             System.out.println("Sign out");
             finish();
             startActivity(getIntent());
@@ -91,7 +83,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         finish();
         startActivity(getIntent());
         Toast.makeText(this, "Funciona el sign in", Toast.LENGTH_LONG).show();
-
     }
 
     private void updateUI(GoogleSignInAccount account) {
@@ -109,8 +100,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             System.out.println("Token");
             System.out.println(account.getIdToken());
 
-            FuncionesBackend.setTokenGoogle(account.getIdToken());
-            FuncionesBackend.setEmailGoogle(account.getEmail());
             this.signInButton.setVisibility(View.GONE);
             this.signoutButton.setVisibility(View.VISIBLE);
 

@@ -17,10 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import es.uma.smartmeter.utils.FuncionesBackend;
+import es.uma.smartmeter.utils.GoogleLoginManager;
 
 /* La actividad MainActivity es en la que aparece el menú principal, y se compone de varios
  botones para saltar a otras actividades. */
@@ -69,16 +68,10 @@ public class MainActivity extends AppCompatActivity {
         this.mPermissionResult.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
         this.mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
             System.out.println("Todo asignado");
         }
-
 
         Button bLogin = findViewById(R.id.bLoginSimulate);
         Button bConnect = findViewById(R.id.bConnect);
@@ -93,10 +86,9 @@ public class MainActivity extends AppCompatActivity {
         El botón bTest imprime el token de google y la wifi en la consola. Parece que es para probar si funciona la comunicacion Bluetooth y eso
          */
         bTest.setOnClickListener(view -> {
-            System.out.println("El token es " + FuncionesBackend.getTokenGoogle());
+            System.out.println("El token es " + GoogleLoginManager.getInstance(getApplicationContext()).getToken());
             System.out.println("El wifi es " + FuncionesBackend.getWifi(getApplicationContext()));
         });
-
 
         /*
         El botón bConnect comprueba si se ha iniciado sesión y si los parámetros GetResponseHogares y ...ResponseMedidas de FuncionesBackend no son nulos.
@@ -104,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
         Si la contraseña es correcta, lanza la actividad DeviceScannActivity
         */
         bConnect.setOnClickListener(view -> {
-            if (account == null)
+            if (account == null) {
                 Toast.makeText(getApplicationContext(), INICIA_SESION, Toast.LENGTH_SHORT).show();
-            else {
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.MyAlertDialogStyle);
                 builder.setTitle("Contraseña");
                 builder.setMessage("Introduzca la contraseña del WiFi");
@@ -135,14 +127,12 @@ public class MainActivity extends AppCompatActivity {
          */
 
         bGraficas.setOnClickListener(view -> {
-
-            if (account == null)
+            if (account == null) {
                 Toast.makeText(getApplicationContext(), INICIA_SESION, Toast.LENGTH_SHORT).show();
-            else {
+            } else {
                 Intent i = new Intent(getApplicationContext(), MeasuresGraphActivity.class);
                 startActivity(i);
             }
-
         });
 
         /*
@@ -150,10 +140,9 @@ public class MainActivity extends AppCompatActivity {
         y lanza la actividad MeasureActivity
          */
         bMeasure.setOnClickListener(view -> {
-
-            if (account == null)
+            if (account == null) {
                 Toast.makeText(getApplicationContext(), INICIA_SESION, Toast.LENGTH_SHORT).show();
-            else {
+            } else {
                 Intent i = new Intent(getApplicationContext(), MeasureActivity.class);
                 startActivity(i);
             }
@@ -165,6 +154,5 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(i);
         });
-
     }
 }

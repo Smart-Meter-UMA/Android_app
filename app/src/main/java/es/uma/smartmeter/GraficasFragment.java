@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
@@ -24,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import es.uma.smartmeter.databinding.ActivityMeasuresGraphBinding;
-import es.uma.smartmeter.utils.FuncionesBackend;
+import es.uma.smartmeter.utils.GoogleLoginManager;
 import es.uma.smartmeter.utils.NetworkManager;
 
 public class GraficasFragment extends Fragment {
@@ -32,13 +33,13 @@ public class GraficasFragment extends Fragment {
     private ActivityMeasuresGraphBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = ActivityMeasuresGraphBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.bDatos.setOnClickListener(v -> {
             Intent i = new Intent(this.getContext(), MedicionesDatosActivity.class);
@@ -59,7 +60,7 @@ public class GraficasFragment extends Fragment {
 
         addData();
 
-        binding.graphView.setTitle(" \n Lista de mediciones históricas para " + FuncionesBackend.getEmailGoogle());
+        binding.graphView.setTitle(" \n Lista de mediciones históricas para " + GoogleLoginManager.getInstance(getContext()).getEmail());
         binding.graphView.setTitleTextSize(28);
     }
 

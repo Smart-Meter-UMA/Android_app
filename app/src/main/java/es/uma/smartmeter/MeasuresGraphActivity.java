@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import es.uma.smartmeter.utils.FuncionesBackend;
+import es.uma.smartmeter.utils.GoogleLoginManager;
 import es.uma.smartmeter.utils.NetworkManager;
 
 public class MeasuresGraphActivity extends AppCompatActivity {
@@ -57,13 +57,10 @@ public class MeasuresGraphActivity extends AppCompatActivity {
         });
         graphView.getGridLabelRenderer().setTextSize(28);
 
-
         addData();
 
-
-        graphView.setTitle(" \n Lista de mediciones históricas para " + FuncionesBackend.getEmailGoogle());
+        graphView.setTitle(" \n Lista de mediciones históricas para " + GoogleLoginManager.getInstance(getApplicationContext()).getEmail());
         graphView.setTitleTextSize(28);
-
     }
 
     @Override
@@ -122,5 +119,4 @@ public class MeasuresGraphActivity extends AppCompatActivity {
             System.out.println("DataPointY: " + array[i].getY());
         }
     }
-
 }
