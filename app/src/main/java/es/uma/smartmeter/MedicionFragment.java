@@ -63,15 +63,9 @@ public class MedicionFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
-        NetworkManager.getInstance(getContext()).cancelAllRequests(TAG);
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
+        NetworkManager.getInstance(getContext()).cancelAllRequests(TAG);
         binding = null;
     }
 }

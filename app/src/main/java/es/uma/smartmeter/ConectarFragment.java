@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import es.uma.smartmeter.databinding.FragmentConectarBinding;
@@ -20,31 +21,33 @@ public class ConectarFragment extends Fragment {
     private String password;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentConectarBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext(), R.style.MyAlertDialogStyle);
-        builder.setTitle("Contraseña");
-        builder.setMessage("Introduzca la contraseña del WiFi");
-        //Crea un EditText en el nuevo cuadro de diálogo que recibe un texto normal pero oculta los caracteres ingresados
-        final EditText input = new EditText(this.getContext());
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        builder.setView(input);
+        view.findViewById(R.id.button).setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext(), R.style.MyAlertDialogStyle);
+            builder.setTitle("Contraseña");
+            builder.setMessage("Introduzca la contraseña del WiFi");
+            //Crea un EditText en el nuevo cuadro de diálogo que recibe un texto normal pero oculta los caracteres ingresados
+            final EditText input = new EditText(this.getContext());
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            builder.setView(input);
 
-        //No comprueba si la contraseña es correcta y lanza una nueva actividad DevideScannActivity
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            password = input.getText().toString();
-            FuncionesBackend.setPassword(password);
-            //He cambiado getApplicationContext() por this.getContext()
-            Intent i = new Intent(this.getContext(), DeviceScanActivity.class);
-            startActivity(i);
-        }).setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
+            //No comprueba si la contraseña es correcta y lanza una nueva actividad DevideScannActivity
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                password = input.getText().toString();
+                FuncionesBackend.setPassword(password);
+                //He cambiado getApplicationContext() por this.getContext()
+                Intent i = new Intent(this.getContext(), DeviceScanActivity.class);
+                startActivity(i);
+            }).setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            builder.show();
+        });
     }
 
     @Override
