@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2013 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package es.uma.smartmeter;
 
 import android.app.Service;
@@ -38,6 +22,7 @@ import java.util.Queue;
 import java.util.UUID;
 
 import es.uma.smartmeter.utils.FuncionesBackend;
+import es.uma.smartmeter.utils.BluetoothGattAttributes;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -49,7 +34,7 @@ public class BluetoothLeService extends Service {
     public final static String ACTION_GATT_SERVICES_DISCOVERED = "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE = "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA = "com.example.bluetooth.le.EXTRA_DATA";
-    public final static UUID UUID_HEART_RATE_MEASUREMENT = UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT);
+    //public final static UUID UUID_HEART_RATE_MEASUREMENT = UUID.fromString(BluetoothGattAttributes.HEART_RATE_MEASUREMENT);
     private final static String TAG = BluetoothLeService.class.getSimpleName();
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
@@ -94,43 +79,10 @@ public class BluetoothLeService extends Service {
                 for (BluetoothGattCharacteristic characteristic : gattService.getCharacteristics()) {
                     Log.i(TAG, "onServicesDiscovered: characteristic=" + characteristic.getUuid());
 
-                    /*
-                    // Mandas el SSID
-                    if (characteristic.getUuid().toString().equals("6bfe5343-d32a-11ec-9d64-0242ac120002")) {
-
-                        System.out.println("Sale del while el wifi");
-                        Log.w(TAG, "onServicesDiscovered: found SSID");
-                        String originalString = FuncionesBackend.getWifi(getApplicationContext());
-
-                        System.out.println("El WiFi conectado es : "+ FuncionesBackend.getWifi(getApplicationContext()));
-                        characteristic.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
-                        mBluetoothGatt.writeCharacteristic(characteristic);
-                        System.out.println("Escribe la char de WIfi UUID");
-
-                    }
-                    // Mandas la passWord
-                    if (characteristic.getUuid().toString().equals("760a51b2-d32a-11ec-9d64-0242ac120002")) {
-
-                        try {
-                            TimeUnit.SECONDS.sleep(10);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        System.out.println("Sale del while el pass");
-
-                        Log.w(TAG, "onServicesDiscovered: found Password");
-                        String originalString = FuncionesBackend.getPassword();
-                        System.out.println("Le escribe " + originalString);
-                        characteristic.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
-                        mBluetoothGatt.writeCharacteristic(characteristic);
-                        System.out.println("Escribe la char de Password");
-                    }*/
-
                     if (characteristic.getUuid().toString().equals("544f4b4e-d32a-11ec-9d64-0242ac120002")) {
                         Log.w(TAG, "onServicesDiscovered: found Token");
                         String originalString = FuncionesBackend.getTokenDispositivo();
 
-                        //String originalString = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MCwiaG9nYXIiOjEsIm93bmVyIjoyfQ.DD-3Gx3hXquPpEcnwEReMXq5rlwSusJXhXgattGudUs";
                         System.out.println("Le escribe " + originalString);
                         characteristic.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
                         System.out.println("length de bytes: " + originalString.getBytes(StandardCharsets.UTF_8).length);
@@ -174,7 +126,6 @@ public class BluetoothLeService extends Service {
                     if (characteristic.getUuid().toString().equals("6bfe5343-d32a-11ec-9d64-0242ac120002") && caracteristica.getUuid().toString().equals("760a51b2-d32a-11ec-9d64-0242ac120002")) {
                         Log.w(TAG, "onServicesDiscovered: found Password");
                         String originalString = FuncionesBackend.getPassword();
-                        //String originalString = "enooooooooooooooooooooooooooooooooooooorrrrrrrrrrrmeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeenooooooooooooooooooooooooooooooooooooorrrrrrrrrrrmeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeenoooooooaaaaaaaaa" ;
                         System.out.println("Le escribe " + originalString + " con length " + originalString.getBytes(StandardCharsets.UTF_8).length);
                         caracteristica.setValue(originalString.getBytes(StandardCharsets.UTF_8)); // call this BEFORE(!) you 'write' any stuff to the server
                         mBluetoothGatt.writeCharacteristic(caracteristica);
@@ -208,7 +159,7 @@ public class BluetoothLeService extends Service {
         // This is special handling for the Heart Rate Measurement profile.  Data parsing is
         // carried out as per profile specifications:
         // http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml
-        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
+        /*if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
             int flag = characteristic.getProperties();
             int format = -1;
             if ((flag & 0x01) != 0) {
@@ -221,7 +172,7 @@ public class BluetoothLeService extends Service {
             final int heartRate = characteristic.getIntValue(format, 1);
             Log.d(TAG, String.format("Received heart rate: %d", heartRate));
             intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
-        } else {
+        } else {*/
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
             if (data != null && data.length > 0) {
@@ -230,7 +181,7 @@ public class BluetoothLeService extends Service {
                     stringBuilder.append(String.format("%02X ", byteChar));
                 intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder);
             }
-        }
+        //}
         sendBroadcast(intent);
     }
 
@@ -368,12 +319,12 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
 
         // This is specific to Heart Rate Measurement.
-        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
+        /*if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
-                    UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+                    UUID.fromString(BluetoothGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mBluetoothGatt.writeDescriptor(descriptor);
-        }
+        }*/
     }
 
     /**
