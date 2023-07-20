@@ -78,7 +78,7 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
             try {
                 String[] items = new String[response.length()];
                 for (int i = 0; i < response.length(); i++) {
-                    items[i] = ((JSONObject) response.get(0)).getString("nombre");
+                    items[i] = response.getJSONObject(0).getString("nombre");
                 }
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, items);
@@ -115,11 +115,5 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
         super.onStop();
 
         NetworkManager.getInstance(this).cancelAllRequests(TAG);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 }
