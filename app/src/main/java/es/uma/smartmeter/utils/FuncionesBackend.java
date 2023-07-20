@@ -17,8 +17,6 @@ public class FuncionesBackend {
     }
 
     public static String getWifi(Context context) {
-
-
         WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = mWifiManager.getConnectionInfo();
 
@@ -32,5 +30,4 @@ public class FuncionesBackend {
     public static void setPassword(String password) {
         FuncionesBackend.password = password;
     }
-
 }

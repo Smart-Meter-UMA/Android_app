@@ -35,6 +35,7 @@ import es.uma.smartmeter.utils.BluetoothGattAttributes;
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
+@SuppressWarnings("MissingPermission")
 public class DeviceScanActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_SCAN_BT = 101;
@@ -171,7 +172,7 @@ public class DeviceScanActivity extends AppCompatActivity {
 
     private void scanLeDevice(final boolean enable) {
         if (enable) {
-            ScanFilter filter = new ScanFilter.Builder().setServiceUuid(ParcelUuid.fromString(BluetoothGattAttributes.UUID_SERVICE)).build();
+            ScanFilter filter = new ScanFilter.Builder().setServiceUuid(new ParcelUuid(BluetoothGattAttributes.UUID_SERVICE)).build();
             ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_BALANCED).build();
             // Stops scanning after a pre-defined scan period.
             mHandler.postDelayed(() -> {

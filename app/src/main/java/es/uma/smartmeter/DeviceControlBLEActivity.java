@@ -44,7 +44,11 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
             }
             // Automatically connects to the device upon successful start-up initialization.
             System.out.println("Conexión a Bluetooth");
-            mBluetoothLeService.connect(mDeviceAddress);
+            //mBluetoothLeService.connect(mDeviceAddress);
+            if(!mBluetoothLeService.sendData(mDeviceAddress)) {
+                System.out.println("Unable to send initialization Data");
+                finish();
+            }
         }
 
         @Override
