@@ -51,9 +51,6 @@
             android:name=".DeviceScanActivity"
             android:exported="false" />
         <activity
-            android:name=".DeviceControlActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
