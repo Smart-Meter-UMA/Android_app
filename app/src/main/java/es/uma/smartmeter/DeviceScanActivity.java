@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.os.ParcelUuid;
 import android.os.StrictMode;
 import android.text.TextUtils;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,7 @@ public class DeviceScanActivity extends AppCompatActivity {
     // Stops scanning after 4 seconds.
     private static final long SCAN_PERIOD = 4000;
     private RecyclerView mDeviceList;
+    private Button mScanButton;
     private DeviceListAdapter mDeviceListAdapter;
     // Device scan callback.
     private final ScanCallback mCallback =
@@ -73,6 +75,16 @@ public class DeviceScanActivity extends AppCompatActivity {
         mDeviceList.setHasFixedSize(false);
         mDeviceList.setContextClickable(true);
         mDeviceList.setLayoutManager(new LinearLayoutManager(this));
+
+        mScanButton = findViewById(R.id.scanAction);
+        mScanButton.setOnClickListener(view -> {
+            if (!mScanning) {
+                mDeviceListAdapter.clear();
+                scanLeDevice(true);
+            } else {
+                scanLeDevice(false);
+            }
+        });
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
@@ -178,15 +190,16 @@ public class DeviceScanActivity extends AppCompatActivity {
             mHandler.postDelayed(() -> {
                 mScanning = false;
                 mBluetoothAdapter.getBluetoothLeScanner().stopScan(mCallback);
-                invalidateOptionsMenu();
+                mScanButton.setText(R.string.option_scan);
             }, SCAN_PERIOD);
 
             mScanning = true;
+            mScanButton.setText(R.string.option_stop);
             mBluetoothAdapter.getBluetoothLeScanner().startScan(Collections.singletonList(filter), settings, mCallback);
         } else {
             mScanning = false;
+            mScanButton.setText(R.string.option_scan);
             mBluetoothAdapter.getBluetoothLeScanner().stopScan(mCallback);
         }
-        invalidateOptionsMenu();
     }
 }
