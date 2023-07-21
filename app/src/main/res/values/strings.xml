@@ -20,6 +20,9 @@
     <string name="networkResponseSuccessText">Response is: %1$s</string>
     <string name="networkResponseErrorText">That didn\'t work! ERR: %1$d, Message: %2$s</string>
 
+    <string name="option_scan">Scan</string>
+    <string name="option_stop">Stop</string>
+
     <string name="unknown_device">Unknown device</string>
     <string name="error_ble_not_supported">BLE is not supported</string>
     <string name="error_bluetooth_not_supported">Bluetooth not supported</string>
