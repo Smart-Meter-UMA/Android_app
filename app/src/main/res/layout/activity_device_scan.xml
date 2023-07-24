@@ -7,24 +7,50 @@
     tools:context=".DeviceScanActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buttons_layout"
+        android:id="@+id/scanAction"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="6dp"
+        android:layout_height="245dp"
+        android:background="#B7F7FB"
+        android:elevation="5dp"
         app:layout_constraintBottom_toTopOf="@id/deviceList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/scanAction"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            android:text="@string/option_scan"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/bluetooth_circle"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/background_bluetooth_circle"
+            app:layout_constraintBottom_toBottomOf="@id/bluetooth_icon"
+            app:layout_constraintEnd_toEndOf="@id/bluetooth_icon"
+            app:layout_constraintStart_toStartOf="@id/bluetooth_icon"
+            app:layout_constraintTop_toTopOf="@id/bluetooth_icon" />
+
+        <ImageView
+            android:id="@+id/bluetooth_icon"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:padding="8dp"
+            android:src="@drawable/icon_bluetooth"
+            android:background="@drawable/background_bluetooth_button"
+            android:tint="#FFFFFF"
+            android:layout_marginTop="80dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/scanText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/scanning"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bluetooth_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -34,6 +60,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttons_layout" />
+        app:layout_constraintTop_toBottomOf="@id/scanAction" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

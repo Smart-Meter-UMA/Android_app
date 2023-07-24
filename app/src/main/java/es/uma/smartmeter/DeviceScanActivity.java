@@ -17,12 +17,16 @@ import android.os.Handler;
 import android.os.ParcelUuid;
 import android.os.StrictMode;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,26 +47,38 @@ public class DeviceScanActivity extends AppCompatActivity {
     // Stops scanning after 4 seconds.
     private static final long SCAN_PERIOD = 4000;
     private RecyclerView mDeviceList;
-    private Button mScanButton;
+    private TextView mScanText;
+    private ImageView mBluetoothCircle;
     private DeviceListAdapter mDeviceListAdapter;
     // Device scan callback.
-    private final ScanCallback mCallback =
-            new ScanCallback() {
-                @Override
-                public void onScanResult(int callbackType, ScanResult result) {
-                    System.out.println("Llega aqui");
+    private final ScanCallback mCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            System.out.println("Llega aqui");
 
-                    if (result == null || result.getDevice() == null || TextUtils.isEmpty(result.getDevice().getName()))
-                        return;
+            if (result == null || result.getDevice() == null || TextUtils.isEmpty(result.getDevice().getName()))
+                return;
 
-                    runOnUiThread(() -> {
-                        mDeviceListAdapter.addDevice(result.getDevice(), result.getScanRecord().getBytes());
-                    });
-                }
-            };
+            runOnUiThread(() -> {
+                mDeviceListAdapter.addDevice(result.getDevice(), result.getScanRecord().getBytes());
+            });
+        }
+    };
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private Handler mHandler;
+
+    private final Runnable mAnimation = new Runnable() {
+        @Override
+        public void run() {
+            mBluetoothCircle.animate().scaleX(4f).scaleY(4f).alpha(0f).setDuration(1000).withEndAction(() -> {
+                mBluetoothCircle.setScaleX(1f);
+                mBluetoothCircle.setScaleY(1f);
+                mBluetoothCircle.setAlpha(1f);
+            });
+            mHandler.postDelayed(this, 1250);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,10 +90,10 @@ public class DeviceScanActivity extends AppCompatActivity {
         mDeviceList = findViewById(R.id.deviceList);
         mDeviceList.setHasFixedSize(false);
         mDeviceList.setContextClickable(true);
+        mDeviceList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mDeviceList.setLayoutManager(new LinearLayoutManager(this));
 
-        mScanButton = findViewById(R.id.scanAction);
-        mScanButton.setOnClickListener(view -> {
+        findViewById(R.id.scanAction).setOnClickListener(view -> {
             if (!mScanning) {
                 mDeviceListAdapter.clear();
                 scanLeDevice(true);
@@ -85,6 +101,9 @@ public class DeviceScanActivity extends AppCompatActivity {
                 scanLeDevice(false);
             }
         });
+
+        mScanText = findViewById(R.id.scanText);
+        mBluetoothCircle = findViewById(R.id.bluetooth_circle);
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
@@ -189,17 +208,20 @@ public class DeviceScanActivity extends AppCompatActivity {
             // Stops scanning after a pre-defined scan period.
             mHandler.postDelayed(() -> {
                 mScanning = false;
+                mScanText.setText(R.string.rescan);
                 mBluetoothAdapter.getBluetoothLeScanner().stopScan(mCallback);
-                mScanButton.setText(R.string.option_scan);
+                mHandler.removeCallbacks(mAnimation);
             }, SCAN_PERIOD);
 
             mScanning = true;
-            mScanButton.setText(R.string.option_stop);
+            mScanText.setText(R.string.scanning);
             mBluetoothAdapter.getBluetoothLeScanner().startScan(Collections.singletonList(filter), settings, mCallback);
+            mAnimation.run();
         } else {
             mScanning = false;
-            mScanButton.setText(R.string.option_scan);
+            mScanText.setText(R.string.rescan);
             mBluetoothAdapter.getBluetoothLeScanner().stopScan(mCallback);
+            mHandler.removeCallbacks(mAnimation);
         }
     }
 }
