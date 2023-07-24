@@ -82,9 +82,9 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.Vi
         holder.getDeviceAddress().setText(device.getAddress());
 
         if (mDeviceList.get(position).getAppearance() == 0x0557) {
-            holder.getDeviceType().setImageResource(R.drawable.smart_meter_icon);
+            holder.getDeviceType().setImageResource(R.drawable.icon_smart_meter);
         } else {
-            holder.getDeviceType().setImageResource(R.drawable.unknown_device_icon);
+            holder.getDeviceType().setImageResource(R.drawable.icon_unknown_device);
         }
 
         holder.getView().setOnClickListener(v1 -> {

@@ -4,13 +4,14 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="6dp">
+    android:padding="6dp"
+    android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/device_type"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/unknown_device_icon"
+        android:src="@drawable/icon_unknown_device"
         android:tint="@android:color/tab_indicator_text" />
 
     <LinearLayout
