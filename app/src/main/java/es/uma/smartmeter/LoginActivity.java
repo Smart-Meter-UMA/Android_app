@@ -105,17 +105,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             Intent intent = new Intent(getApplicationContext(), NavigationBar.class);
             startActivity(intent);
+            finish();
         }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(this, "Error en el sign in", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 }
