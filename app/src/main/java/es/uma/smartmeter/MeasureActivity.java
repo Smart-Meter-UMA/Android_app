@@ -30,7 +30,6 @@ public class MeasureActivity extends AppCompatActivity {
 
         this.correo = findViewById(R.id.tCorreo);
         this.fecha = findViewById(R.id.tFecha);
-        this.power = findViewById(R.id.tPower);
 
         NetworkManager.getInstance(this).newMeasurementsRequest(response -> {
             System.out.println("La response es " + response.toString());

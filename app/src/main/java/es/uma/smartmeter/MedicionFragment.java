@@ -33,7 +33,6 @@ public class MedicionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         NetworkManager.getInstance(getContext()).newMeasurementsRequest(response -> {
             System.out.println("La response es " + response.toString());
             try {
@@ -41,8 +40,11 @@ public class MedicionFragment extends Fragment {
                 JSONObject jsonObject = ((JSONObject) response.get(response.length() - 1));
                 System.out.println(jsonObject);
 
-                binding.tPower.setText(jsonObject.get("kw") + "KW");
-                System.out.println(binding.tPower.getText());
+                binding.include.tvPower.setText(jsonObject.get("kw") + "kW");
+            System.out.println(binding.include.tvPower.getText());
+
+                binding.include.tvPower.setText(jsonObject.get("kw") + "KW");
+                System.out.println(binding.include.tvPower.getText());
 
                 SimpleDateFormat dfISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
                 SimpleDateFormat dfTxt = new SimpleDateFormat("dd/MM/yyyy");
@@ -59,7 +61,11 @@ public class MedicionFragment extends Fragment {
             }
         }, TAG);
 
-        binding.tCorreo.setText(binding.tCorreo.getText().toString().replace("CORREO", GoogleLoginManager.getInstance(getContext()).getEmail()));
+        binding.tCorreo.setText(binding.tCorreo.getText().toString().replace("CORREO",GoogleLoginManager.getInstance(getContext()).getEmail()));
+        //Prueba
+        int progress = 50; // Valor de progreso entre 0 y 100
+        binding.include.progressBar.setProgress(progress);
+
     }
 
     @Override

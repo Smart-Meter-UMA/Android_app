@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="ring"
+    android:thickness="60dp"
+    android:innerRadius="150dp"
+    android:thicknessRatio="20"
+    android:useLevel="false">
+    <solid android:color="#DF162E" />
+     <!-- <solid android:color="#73809E" />Color de fondo del aro -->
+</shape>
