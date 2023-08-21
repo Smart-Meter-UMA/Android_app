@@ -1,8 +1,11 @@
 package es.uma.smartmeter;
 
 import android.Manifest;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.TypedValue;
+import android.view.MenuItem;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -15,6 +18,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
 
 import es.uma.smartmeter.utils.GoogleLoginManager;
@@ -30,46 +35,51 @@ public class NavigationBar extends AppCompatActivity {
                     System.out.println("onActivityResult: PERMISSION DENIED");
                 }
             });
-    private TabLayout tbNavigationBar;
+    private BottomNavigationView tbNavigationBar;
     private ViewPager2 viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_bar);
+
         tbNavigationBar = findViewById(R.id.tbNavigationBar);
+
+        TypedValue typedValue = new TypedValue();
+        int[] colorAttr = new int[] { R.attr.colorSurface };
+        int indexOfAttrColor = 0;
+        TypedArray a = tbNavigationBar.getContext().obtainStyledAttributes(typedValue.data, colorAttr);
+        int color = a.getColor(indexOfAttrColor, -1);
+        a.recycle();
+
+        getWindow().setNavigationBarColor(color);
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new AdaptadorFragmentos(getSupportFragmentManager(), getLifecycle()));
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                tbNavigationBar.selectTab(tbNavigationBar.getTabAt(position));
+                tbNavigationBar.setSelectedItemId(tbNavigationBar.getMenu().getItem(position).getItemId());
             }
         });
-        tbNavigationBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tbNavigationBar.getSelectedTabPosition());
+        tbNavigationBar.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.item_measurement:
+                    viewPager.setCurrentItem(0);
+                    return true;
+                case R.id.item_graphs:
+                    viewPager.setCurrentItem(1);
+                    return true;
+                case R.id.item_connect:
+                    viewPager.setCurrentItem(2);
+                    return true;
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            return false;
         });
 
         //Cosas del main para poder lanzar las actividades
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
-        this.mPermissionResult.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
-        this.mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
 
         GoogleSignInAccount account = GoogleLoginManager.getInstance(getApplicationContext()).getAccount();
         if (account != null) {

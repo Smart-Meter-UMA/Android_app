@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_measurement"
+        android:enabled="true"
+        android:icon="@drawable/icon_measurement"
+        android:title="@string/item_measurement"/>
+    <item
+        android:id="@+id/item_graphs"
+        android:enabled="true"
+        android:icon="@drawable/icon_graphs"
+        android:title="@string/item_graphs"/>
+    <item
+        android:id="@+id/item_connect"
+        android:enabled="true"
+        android:icon="@drawable/icon_connect"
+        android:title="@string/item_connect"/>
+</menu>

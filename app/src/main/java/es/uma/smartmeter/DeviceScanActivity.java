@@ -146,19 +146,15 @@ public class DeviceScanActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Arrays.stream(grantResults).forEach(result -> {
-            if (result != RESULT_OK) finish();
-        });
-        for (int result : grantResults) {
-            if (result != RESULT_OK) {
-                finish();
-            }
-        }
-        if (requestCode == REQUEST_SCAN_BT && grantResults[0] == RESULT_OK) {
-            if (mBluetoothAdapter != null && !mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            }
+
+        if (requestCode == REQUEST_SCAN_BT) {
+            Arrays.stream(grantResults).forEach(result -> {
+                if (result == RESULT_CANCELED) {
+                    finish();
+                }
+            });
+
+            startActivity(getIntent());
         }
     }
 
@@ -176,6 +172,7 @@ public class DeviceScanActivity extends AppCompatActivity {
         mDeviceListAdapter = new DeviceListAdapter(new ArrayList<>(), v -> {
             if (mScanning) {
                 mBluetoothAdapter.getBluetoothLeScanner().stopScan(mCallback);
+                mHandler.removeCallbacks(mAnimation);
                 mScanning = false;
             }
             finish();
