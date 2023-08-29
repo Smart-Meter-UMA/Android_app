@@ -1,6 +1,7 @@
 package es.uma.smartmeter;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,14 +37,13 @@ public class MedicionFragment extends Fragment {
         NetworkManager.getInstance(getContext()).newMeasurementsRequest(response -> {
             System.out.println("La response es " + response.toString());
             try {
-                //this.power.setText((String)(json.get(json.length()-1));
                 JSONObject jsonObject = ((JSONObject) response.get(response.length() - 1));
                 System.out.println(jsonObject);
 
-                binding.include.tvPower.setText(jsonObject.get("kw") + "kW");
-            System.out.println(binding.include.tvPower.getText());
-
                 binding.include.tvPower.setText(jsonObject.get("kw") + "KW");
+                int progress = 0;
+                progress += Integer.parseInt(jsonObject.get("kw").toString());
+                binding.include.progressBar.setProgress(progress);
                 System.out.println(binding.include.tvPower.getText());
 
                 SimpleDateFormat dfISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -62,9 +62,6 @@ public class MedicionFragment extends Fragment {
         }, TAG);
 
         binding.tCorreo.setText(binding.tCorreo.getText().toString().replace("CORREO",GoogleLoginManager.getInstance(getContext()).getEmail()));
-        //Prueba
-        int progress = 50; // Valor de progreso entre 0 y 100
-        binding.include.progressBar.setProgress(progress);
 
     }
 
