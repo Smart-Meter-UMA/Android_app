@@ -1,4 +1,12 @@
 <resources>
+
+    <style name="Theme.SmartMeter.Starting" parent="Theme.SplashScreen">
+        <item name="colorPrimary">@color/md_theme_dark_secondary</item>
+        <item name="windowSplashScreenBackground">@color/md_theme_dark_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>

@@ -30,7 +30,6 @@ public class ConectarFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.button.setOnClickListener(v -> conect());
-        conect();
     }
 
     @Override
