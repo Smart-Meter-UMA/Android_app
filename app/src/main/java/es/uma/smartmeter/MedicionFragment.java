@@ -42,7 +42,9 @@ public class MedicionFragment extends Fragment {
 
                 binding.include.tvPower.setText(jsonObject.get("kw") + "KW");
                 int progress = 0;
+                int max_kw = 3000; //KW máximos alcanzables estimados. Usado para calcular el porcentage de progressbar coloreado
                 progress += Integer.parseInt(jsonObject.get("kw").toString());
+                progress = progress/max_kw * 100;
                 binding.include.progressBar.setProgress(progress);
                 System.out.println(binding.include.tvPower.getText());
 

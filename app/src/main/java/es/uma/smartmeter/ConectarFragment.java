@@ -3,7 +3,6 @@ package es.uma.smartmeter;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,7 @@ public class ConectarFragment extends Fragment {
     private void conect(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogStyle);
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_connect, null);
+        View dialogView = inflater.inflate(R.layout.dialog_pasword, null);
         builder.setTitle("Contraseña");
         builder.setMessage("Introduzca la contraseña del WiFi");
         EditText etContraseña = dialogView.findViewById(R.id.etContraseña);
