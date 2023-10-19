@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="backend_url" translatable="false">http://192.168.100.72:8001/kproject/</string>
+    <string name="backend_url" translatable="false">https://smartmeter.nachomata.es:2053/kproject/</string>
 </resources>
