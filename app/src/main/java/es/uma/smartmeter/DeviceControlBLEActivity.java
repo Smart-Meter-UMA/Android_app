@@ -82,7 +82,7 @@ public class DeviceControlBLEActivity extends AppCompatActivity {
             try {
                 String[] items = new String[response.length()];
                 for (int i = 0; i < response.length(); i++) {
-                    items[i] = response.getJSONObject(0).getString("nombre");
+                    items[i] = response.getJSONObject(i).getString("nombre");
                 }
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, items);
