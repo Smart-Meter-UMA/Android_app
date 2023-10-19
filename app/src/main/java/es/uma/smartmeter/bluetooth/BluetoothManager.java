@@ -9,7 +9,10 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -23,6 +26,7 @@ public class BluetoothManager {
 
     private final ConcurrentLinkedQueue<BluetoothOperation> queue;
     private final ConcurrentHashMap<String, BluetoothGatt> gatts;
+    private HashMap<UUID, ArrayList<BluetoothCharacteristicChangeListener>> characteristicChangeListeners;
 
     private BluetoothOperation currentOperation;
 
@@ -75,6 +79,11 @@ public class BluetoothManager {
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
             Log.e("BLE", "Characteristic " + characteristic.getUuid() + "was changed, device: " + gatt.getDevice().getAddress());
+            if (characteristicChangeListeners.containsKey(characteristic.getUuid())) {
+                for (BluetoothCharacteristicChangeListener listener : characteristicChangeListeners.get(characteristic.getUuid())) {
+                    listener.onCharacteristicChanged(gatt.getDevice().getAddress(), characteristic);
+                }
+            }
         }
     };
 
@@ -85,6 +94,7 @@ public class BluetoothManager {
         queue = new ConcurrentLinkedQueue<>();
         gatts = new ConcurrentHashMap<>();
         currentOperation = null;
+        characteristicChangeListeners = new HashMap<>();
     }
 
     public static synchronized BluetoothManager getInstance(Context context) {
@@ -140,6 +150,17 @@ public class BluetoothManager {
             return;
         }
         operation.execute(gatt);
+        if (!operation.hasCompletionCallback()) {
+            setCurrentOperation(null);
+            drive();
+        }
+    }
+
+    public void addCharacteristicChangeListener(UUID characteristicUuid, BluetoothCharacteristicChangeListener characteristicChangeListener) {
+        if(!characteristicChangeListeners.containsKey(characteristicUuid)) {
+            characteristicChangeListeners.put(characteristicUuid, new ArrayList<>());
+        }
+        characteristicChangeListeners.get(characteristicUuid).add(characteristicChangeListener);
     }
 
     public BluetoothGatt getGatt(BluetoothDevice device) {

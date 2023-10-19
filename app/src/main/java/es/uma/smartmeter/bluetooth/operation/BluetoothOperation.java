@@ -15,4 +15,8 @@ public abstract class BluetoothOperation {
     public BluetoothDevice getDevice() {
         return device;
     }
+
+    public boolean hasCompletionCallback() {
+        return true;
+    }
 }
