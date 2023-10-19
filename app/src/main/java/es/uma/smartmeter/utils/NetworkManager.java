@@ -58,11 +58,11 @@ public class NetworkManager {
         getRequestQueue().cancelAll(tag);
     }
 
-    public void newLoginRequest(Response.Listener<JSONObject> listener, Object tag) {
+    public void newLoginRequest(Response.Listener<JSONObject> listener, Response.ErrorListener error, Object tag) {
         String url = getURL("login/");
 
         // Solicita una respuesta json desde la URL proporcionada.
-        JSONObjectRequest request = new JSONObjectRequest(url, tag, null, listener, this::showError);
+        JSONObjectRequest request = new JSONObjectRequest(url, tag, null, listener, error);
         // Añade la petición al RequestQueue.
         addToRequestQueue(request);
     }

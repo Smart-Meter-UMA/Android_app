@@ -18,10 +18,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONObject;
+
 import es.uma.smartmeter.utils.GoogleLoginManager;
+import es.uma.smartmeter.utils.NetworkManager;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
+    public static final String TAG = "SmartMeter-Login";
     // La forma de obtener el token es con account.getToken(), ya es cuestión de mandarlo donde sea.
     private SignInButton signInButton;
     private Button signoutButton;
@@ -50,13 +54,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         GoogleSignInAccount account = GoogleLoginManager.getInstance(this).getAccount();
         if (account != null) {
-            System.out.println("La acccount es " + account.getEmail());
-            System.out.println("EL token es " + account.getIdToken());
-            //Una vez tienes eso puedes hacer la post junto al nombre y al hogar.
+            NetworkManager.getInstance(this).newLoginRequest(response -> {
+                System.out.println("La response es " + response.toString());
+                if (response.length() > 1) {
+                    System.out.println("La acccount es " + account.getEmail());
+                    System.out.println("EL token es " + account.getIdToken());
+                    //Una vez tienes eso puedes hacer la post junto al nombre y al hogar.
+                    updateUI(account);
+                }
+            }, error -> {
+                updateUI(null);
+            }, TAG);
         } else {
             System.out.println("Account nula");
+            updateUI(null);
         }
-        updateUI(account);
 
         this.signInButton.setOnClickListener(view -> {
             Intent i = GoogleLoginManager.getInstance(this).getClient().getSignInIntent();
@@ -70,6 +82,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             finish();
             startActivity(getIntent());
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        NetworkManager.getInstance(this).cancelAllRequests(TAG);
     }
 
     @Override
