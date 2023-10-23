@@ -31,4 +31,6 @@
     <string name="item_graphs">Graphs</string>
     <string name="item_connect">Connect</string>
 
+    <string name="login_title">Inicie Sesión con Google</string>
+    <string name="login_subtitle">Para mayor comodidad, le facilitamos el acceso a nuestra aplicación a través de su cuenta de Google</string>
 </resources>
