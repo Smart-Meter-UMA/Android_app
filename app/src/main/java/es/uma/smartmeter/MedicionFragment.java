@@ -34,7 +34,15 @@ public class MedicionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.swiperefresh.setOnRefreshListener(this::getMedicion);
+        binding.tCorreo.setText(binding.tCorreo.getText().toString().replace("CORREO",GoogleLoginManager.getInstance(getContext()).getEmail()));
+        getMedicion();
+    }
+
+    private void getMedicion() {
         NetworkManager.getInstance(getContext()).newMeasurementsRequest(response -> {
+            binding.swiperefresh.setRefreshing(false);
             System.out.println("La response es " + response.toString());
             try {
                 JSONObject jsonObject = ((JSONObject) response.get(response.length() - 1));
@@ -62,9 +70,6 @@ public class MedicionFragment extends Fragment {
                 e.printStackTrace();
             }
         }, TAG);
-
-        binding.tCorreo.setText(binding.tCorreo.getText().toString().replace("CORREO",GoogleLoginManager.getInstance(getContext()).getEmail()));
-
     }
 
     @Override
