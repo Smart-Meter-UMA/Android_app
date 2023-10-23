@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="backend_url" translatable="false">https://smart-meter-backend.ertis.uma.es</string>
+    <string name="backend_url" translatable="false">https://smart-meter-backend.ertis.uma.es/kproject/</string>
 </resources>
