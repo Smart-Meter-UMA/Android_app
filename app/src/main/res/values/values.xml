@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="backend_url" translatable="false">https://smart-meter-backend.ertis.uma.es</string>
-    <string name="frontend_url" translatable="false">https://smart-meter.ertis.uma.es</string>
-    <string name="precios_url" translatable="false">https://smart-meter-precios.ertis.uma.es</string>
 </resources>
